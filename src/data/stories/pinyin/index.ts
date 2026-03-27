@@ -1,0 +1,866 @@
+import type { PinyinStory, Level } from '../../../types/story'
+
+export const allPinyinStories: PinyinStory[] = [
+  // ===== Level 1: Simple initials/finals, short sentences =====
+  {
+    id: 'py-1-1',
+    title: '迪迦说你好',
+    titlePinyin: 'Dí jiā shuō nǐ hǎo',
+    module: 'pinyin',
+    level: 1,
+    rewardCardId: 'decker',
+    totalSentences: 5,
+    sentences: [
+      {
+        words: [
+          { pinyin: 'dí', char: '迪', tone: 2 },
+          { pinyin: 'jiā', char: '迦', tone: 1 },
+          { pinyin: 'lái', char: '来', tone: 2 },
+          { pinyin: 'le', char: '了', tone: 0 },
+        ],
+        meaning: '迪迦来了',
+      },
+      {
+        words: [
+          { pinyin: 'tā', char: '他', tone: 1 },
+          { pinyin: 'duì', char: '对', tone: 4 },
+          { pinyin: 'dà', char: '大', tone: 4 },
+          { pinyin: 'jiā', char: '家', tone: 1 },
+          { pinyin: 'shuō', char: '说', tone: 1 },
+          { pinyin: 'nǐ', char: '你', tone: 3 },
+          { pinyin: 'hǎo', char: '好', tone: 3 },
+        ],
+        meaning: '他对大家说你好',
+      },
+      {
+        words: [
+          { pinyin: 'mā', char: '妈', tone: 1 },
+          { pinyin: 'ma', char: '妈', tone: 0 },
+          { pinyin: 'bào', char: '抱', tone: 4 },
+          { pinyin: 'bào', char: '抱', tone: 4 },
+          { pinyin: 'tā', char: '他', tone: 1 },
+        ],
+        meaning: '妈妈抱抱他',
+      },
+      {
+        words: [
+          { pinyin: 'bà', char: '爸', tone: 4 },
+          { pinyin: 'ba', char: '爸', tone: 0 },
+          { pinyin: 'mō', char: '摸', tone: 1 },
+          { pinyin: 'mō', char: '摸', tone: 1 },
+          { pinyin: 'tā', char: '他', tone: 1 },
+          { pinyin: 'de', char: '的', tone: 0 },
+          { pinyin: 'tóu', char: '头', tone: 2 },
+        ],
+        meaning: '爸爸摸摸他的头',
+      },
+      {
+        words: [
+          { pinyin: 'dí', char: '迪', tone: 2 },
+          { pinyin: 'jiā', char: '迦', tone: 1 },
+          { pinyin: 'fēi', char: '飞', tone: 1 },
+          { pinyin: 'le', char: '了', tone: 0 },
+        ],
+        meaning: '迪迦飞了',
+      },
+    ],
+    quiz: [
+      { id: 'py-1-1-q1', question: '迪迦对大家说什么？', questionPinyin: 'Dí jiā duì dà jiā shuō shén me?', options: ['再见', '你好', '谢谢', '对不起'], correctIndex: 1 },
+      { id: 'py-1-1-q2', question: '谁摸摸迪迦的头？', questionPinyin: 'Shéi mō mō dí jiā de tóu?', options: ['妈妈', '爸爸', '哥哥', '姐姐'], correctIndex: 1 },
+      { id: 'py-1-1-q3', question: '"bà" 的声调是几声？', options: ['一声', '二声', '三声', '四声'], correctIndex: 3 },
+    ],
+  },
+  {
+    id: 'py-1-2',
+    title: '赛罗的一天',
+    titlePinyin: 'Sài luó de yī tiān',
+    module: 'pinyin',
+    level: 1,
+    rewardCardId: 'blazar',
+    totalSentences: 5,
+    sentences: [
+      {
+        words: [
+          { pinyin: 'sài', char: '赛', tone: 4 },
+          { pinyin: 'luó', char: '罗', tone: 2 },
+          { pinyin: 'qǐ', char: '起', tone: 3 },
+          { pinyin: 'le', char: '了', tone: 0 },
+        ],
+        meaning: '赛罗起了',
+      },
+      {
+        words: [
+          { pinyin: 'tā', char: '他', tone: 1 },
+          { pinyin: 'hē', char: '喝', tone: 1 },
+          { pinyin: 'le', char: '了', tone: 0 },
+          { pinyin: 'jī', char: '鸡', tone: 1 },
+          { pinyin: 'tāng', char: '汤', tone: 1 },
+        ],
+        meaning: '他喝了鸡汤',
+      },
+      {
+        words: [
+          { pinyin: 'tā', char: '他', tone: 1 },
+          { pinyin: 'qù', char: '去', tone: 4 },
+          { pinyin: 'xué', char: '学', tone: 2 },
+          { pinyin: 'xí', char: '习', tone: 2 },
+        ],
+        meaning: '他去学习',
+      },
+      {
+        words: [
+          { pinyin: 'gē', char: '哥', tone: 1 },
+          { pinyin: 'ge', char: '哥', tone: 0 },
+          { pinyin: 'jiào', char: '教', tone: 4 },
+          { pinyin: 'tā', char: '他', tone: 1 },
+          { pinyin: 'kàn', char: '看', tone: 4 },
+          { pinyin: 'shū', char: '书', tone: 1 },
+        ],
+        meaning: '哥哥教他看书',
+      },
+      {
+        words: [
+          { pinyin: 'sài', char: '赛', tone: 4 },
+          { pinyin: 'luó', char: '罗', tone: 2 },
+          { pinyin: 'hǎo', char: '好', tone: 3 },
+          { pinyin: 'kāi', char: '开', tone: 1 },
+          { pinyin: 'xīn', char: '心', tone: 1 },
+        ],
+        meaning: '赛罗好开心',
+      },
+    ],
+    quiz: [
+      { id: 'py-1-2-q1', question: '赛罗早上喝了什么？', questionPinyin: 'Sài luó zǎo shang hē le shén me?', options: ['牛奶', '果汁', '鸡汤', '水'], correctIndex: 2 },
+      { id: 'py-1-2-q2', question: '谁教赛罗看书？', questionPinyin: 'Shéi jiào sài luó kàn shū?', options: ['妈妈', '爸爸', '哥哥', '姐姐'], correctIndex: 2 },
+      { id: 'py-1-2-q3', question: '"qǐ" 的声调是几声？', options: ['一声', '二声', '三声', '四声'], correctIndex: 2 },
+    ],
+  },
+  {
+    id: 'py-1-3',
+    title: '泽塔吃水果',
+    titlePinyin: 'Zé tǎ chī shuǐ guǒ',
+    module: 'pinyin',
+    level: 1,
+    rewardCardId: 'max-galaxy',
+    totalSentences: 5,
+    sentences: [
+      {
+        words: [
+          { pinyin: 'zé', char: '泽', tone: 2 },
+          { pinyin: 'tǎ', char: '塔', tone: 3 },
+          { pinyin: 'è', char: '饿', tone: 4 },
+          { pinyin: 'le', char: '了', tone: 0 },
+        ],
+        meaning: '泽塔饿了',
+      },
+      {
+        words: [
+          { pinyin: 'tā', char: '他', tone: 1 },
+          { pinyin: 'chī', char: '吃', tone: 1 },
+          { pinyin: 'le', char: '了', tone: 0 },
+          { pinyin: 'yī', char: '一', tone: 1 },
+          { pinyin: 'gè', char: '个', tone: 4 },
+          { pinyin: 'lí', char: '梨', tone: 2 },
+        ],
+        meaning: '他吃了一个梨',
+      },
+      {
+        words: [
+          { pinyin: 'tā', char: '他', tone: 1 },
+          { pinyin: 'yòu', char: '又', tone: 4 },
+          { pinyin: 'chī', char: '吃', tone: 1 },
+          { pinyin: 'le', char: '了', tone: 0 },
+          { pinyin: 'jú', char: '橘', tone: 2 },
+          { pinyin: 'zi', char: '子', tone: 0 },
+        ],
+        meaning: '他又吃了橘子',
+      },
+      {
+        words: [
+          { pinyin: 'mā', char: '妈', tone: 1 },
+          { pinyin: 'ma', char: '妈', tone: 0 },
+          { pinyin: 'gěi', char: '给', tone: 3 },
+          { pinyin: 'tā', char: '他', tone: 1 },
+          { pinyin: 'yī', char: '一', tone: 1 },
+          { pinyin: 'gè', char: '个', tone: 4 },
+          { pinyin: 'guā', char: '瓜', tone: 1 },
+        ],
+        meaning: '妈妈给他一个瓜',
+      },
+      {
+        words: [
+          { pinyin: 'zé', char: '泽', tone: 2 },
+          { pinyin: 'tǎ', char: '塔', tone: 3 },
+          { pinyin: 'chī', char: '吃', tone: 1 },
+          { pinyin: 'de', char: '得', tone: 0 },
+          { pinyin: 'hǎo', char: '好', tone: 3 },
+          { pinyin: 'bǎo', char: '饱', tone: 3 },
+        ],
+        meaning: '泽塔吃得好饱',
+      },
+    ],
+    quiz: [
+      { id: 'py-1-3-q1', question: '泽塔先吃了什么？', questionPinyin: 'Zé tǎ xiān chī le shén me?', options: ['橘子', '梨', '瓜', '桃'], correctIndex: 1 },
+      { id: 'py-1-3-q2', question: '谁给泽塔一个瓜？', questionPinyin: 'Shéi gěi zé tǎ yī gè guā?', options: ['爸爸', '哥哥', '妈妈', '姐姐'], correctIndex: 2 },
+      { id: 'py-1-3-q3', question: '"chī" 的声调是几声？', options: ['一声', '二声', '三声', '四声'], correctIndex: 0 },
+    ],
+  },
+  {
+    id: 'py-1-4',
+    title: '迪迦和小猫',
+    titlePinyin: 'Dí jiā hé xiǎo māo',
+    module: 'pinyin',
+    level: 1,
+    rewardCardId: 'victory-knight',
+    totalSentences: 5,
+    sentences: [
+      {
+        words: [
+          { pinyin: 'dí', char: '迪', tone: 2 },
+          { pinyin: 'jiā', char: '迦', tone: 1 },
+          { pinyin: 'kàn', char: '看', tone: 4 },
+          { pinyin: 'dào', char: '到', tone: 4 },
+          { pinyin: 'yī', char: '一', tone: 1 },
+          { pinyin: 'zhī', char: '只', tone: 1 },
+          { pinyin: 'māo', char: '猫', tone: 1 },
+        ],
+        meaning: '迪迦看到一只猫',
+      },
+      {
+        words: [
+          { pinyin: 'xiǎo', char: '小', tone: 3 },
+          { pinyin: 'māo', char: '猫', tone: 1 },
+          { pinyin: 'jiào', char: '叫', tone: 4 },
+          { pinyin: 'le', char: '了', tone: 0 },
+          { pinyin: 'yī', char: '一', tone: 1 },
+          { pinyin: 'shēng', char: '声', tone: 1 },
+        ],
+        meaning: '小猫叫了一声',
+      },
+      {
+        words: [
+          { pinyin: 'dí', char: '迪', tone: 2 },
+          { pinyin: 'jiā', char: '迦', tone: 1 },
+          { pinyin: 'mō', char: '摸', tone: 1 },
+          { pinyin: 'mō', char: '摸', tone: 1 },
+          { pinyin: 'tā', char: '它', tone: 1 },
+          { pinyin: 'de', char: '的', tone: 0 },
+          { pinyin: 'tóu', char: '头', tone: 2 },
+        ],
+        meaning: '迪迦摸摸它的头',
+      },
+      {
+        words: [
+          { pinyin: 'xiǎo', char: '小', tone: 3 },
+          { pinyin: 'māo', char: '猫', tone: 1 },
+          { pinyin: 'hǎo', char: '好', tone: 3 },
+          { pinyin: 'kāi', char: '开', tone: 1 },
+          { pinyin: 'xīn', char: '心', tone: 1 },
+        ],
+        meaning: '小猫好开心',
+      },
+      {
+        words: [
+          { pinyin: 'tā', char: '他', tone: 1 },
+          { pinyin: 'bào', char: '抱', tone: 4 },
+          { pinyin: 'zhe', char: '着', tone: 0 },
+          { pinyin: 'xiǎo', char: '小', tone: 3 },
+          { pinyin: 'māo', char: '猫', tone: 1 },
+          { pinyin: 'huí', char: '回', tone: 2 },
+          { pinyin: 'jiā', char: '家', tone: 1 },
+        ],
+        meaning: '他抱着小猫回家',
+      },
+    ],
+    quiz: [
+      { id: 'py-1-4-q1', question: '迪迦看到了什么？', questionPinyin: 'Dí jiā kàn dào le shén me?', options: ['小狗', '小猫', '小鸟', '小鱼'], correctIndex: 1 },
+      { id: 'py-1-4-q2', question: '迪迦摸了小猫哪里？', questionPinyin: 'Dí jiā mō le xiǎo māo nǎ lǐ?', options: ['尾巴', '背', '头', '脚'], correctIndex: 2 },
+      { id: 'py-1-4-q3', question: '"bào" 的声调是几声？', options: ['一声', '二声', '三声', '四声'], correctIndex: 3 },
+    ],
+  },
+  {
+    id: 'py-1-5',
+    title: '赛罗的家',
+    titlePinyin: 'Sài luó de jiā',
+    module: 'pinyin',
+    level: 1,
+    rewardCardId: 'rosso-aqua',
+    totalSentences: 5,
+    sentences: [
+      {
+        words: [
+          { pinyin: 'sài', char: '赛', tone: 4 },
+          { pinyin: 'luó', char: '罗', tone: 2 },
+          { pinyin: 'de', char: '的', tone: 0 },
+          { pinyin: 'jiā', char: '家', tone: 1 },
+          { pinyin: 'hěn', char: '很', tone: 3 },
+          { pinyin: 'dà', char: '大', tone: 4 },
+        ],
+        meaning: '赛罗的家很大',
+      },
+      {
+        words: [
+          { pinyin: 'jiā', char: '家', tone: 1 },
+          { pinyin: 'lǐ', char: '里', tone: 3 },
+          { pinyin: 'yǒu', char: '有', tone: 3 },
+          { pinyin: 'yī', char: '一', tone: 1 },
+          { pinyin: 'zhāng', char: '张', tone: 1 },
+          { pinyin: 'chuáng', char: '床', tone: 2 },
+        ],
+        meaning: '家里有一张床',
+      },
+      {
+        words: [
+          { pinyin: 'hái', char: '还', tone: 2 },
+          { pinyin: 'yǒu', char: '有', tone: 3 },
+          { pinyin: 'yī', char: '一', tone: 1 },
+          { pinyin: 'zhāng', char: '张', tone: 1 },
+          { pinyin: 'zhuō', char: '桌', tone: 1 },
+          { pinyin: 'zi', char: '子', tone: 0 },
+        ],
+        meaning: '还有一张桌子',
+      },
+      {
+        words: [
+          { pinyin: 'bà', char: '爸', tone: 4 },
+          { pinyin: 'ba', char: '爸', tone: 0 },
+          { pinyin: 'zuò', char: '坐', tone: 4 },
+          { pinyin: 'zài', char: '在', tone: 4 },
+          { pinyin: 'yǐ', char: '椅', tone: 3 },
+          { pinyin: 'zi', char: '子', tone: 0 },
+          { pinyin: 'shàng', char: '上', tone: 4 },
+        ],
+        meaning: '爸爸坐在椅子上',
+      },
+      {
+        words: [
+          { pinyin: 'sài', char: '赛', tone: 4 },
+          { pinyin: 'luó', char: '罗', tone: 2 },
+          { pinyin: 'ài', char: '爱', tone: 4 },
+          { pinyin: 'tā', char: '他', tone: 1 },
+          { pinyin: 'de', char: '的', tone: 0 },
+          { pinyin: 'jiā', char: '家', tone: 1 },
+        ],
+        meaning: '赛罗爱他的家',
+      },
+    ],
+    quiz: [
+      { id: 'py-1-5-q1', question: '赛罗的家怎么样？', questionPinyin: 'Sài luó de jiā zěn me yàng?', options: ['很小', '很大', '很高', '很远'], correctIndex: 1 },
+      { id: 'py-1-5-q2', question: '爸爸坐在哪里？', questionPinyin: 'Bà ba zuò zài nǎ lǐ?', options: ['床上', '桌子上', '椅子上', '地上'], correctIndex: 2 },
+      { id: 'py-1-5-q3', question: '"zuò" 的声调是几声？', options: ['一声', '二声', '三声', '四声'], correctIndex: 3 },
+    ],
+  },
+  {
+    id: 'py-1-6',
+    title: '银河看星星',
+    titlePinyin: 'Yín hé kàn xīng xing',
+    module: 'pinyin',
+    level: 1,
+    rewardCardId: 'blu-flame',
+    totalSentences: 5,
+    sentences: [
+      {
+        words: [
+          { pinyin: 'tiān', char: '天', tone: 1 },
+          { pinyin: 'hēi', char: '黑', tone: 1 },
+          { pinyin: 'le', char: '了', tone: 0 },
+        ],
+        meaning: '天黑了',
+      },
+      {
+        words: [
+          { pinyin: 'yín', char: '银', tone: 2 },
+          { pinyin: 'hé', char: '河', tone: 2 },
+          { pinyin: 'tái', char: '抬', tone: 2 },
+          { pinyin: 'tóu', char: '头', tone: 2 },
+          { pinyin: 'kàn', char: '看', tone: 4 },
+          { pinyin: 'tiān', char: '天', tone: 1 },
+        ],
+        meaning: '银河抬头看天',
+      },
+      {
+        words: [
+          { pinyin: 'xīng', char: '星', tone: 1 },
+          { pinyin: 'xing', char: '星', tone: 0 },
+          { pinyin: 'hǎo', char: '好', tone: 3 },
+          { pinyin: 'duō', char: '多', tone: 1 },
+          { pinyin: 'a', char: '啊', tone: 0 },
+        ],
+        meaning: '星星好多啊',
+      },
+      {
+        words: [
+          { pinyin: 'yī', char: '一', tone: 1 },
+          { pinyin: 'kē', char: '颗', tone: 1 },
+          { pinyin: 'liǎng', char: '两', tone: 3 },
+          { pinyin: 'kē', char: '颗', tone: 1 },
+          { pinyin: 'sān', char: '三', tone: 1 },
+          { pinyin: 'kē', char: '颗', tone: 1 },
+        ],
+        meaning: '一颗两颗三颗',
+      },
+      {
+        words: [
+          { pinyin: 'yín', char: '银', tone: 2 },
+          { pinyin: 'hé', char: '河', tone: 2 },
+          { pinyin: 'xiào', char: '笑', tone: 4 },
+          { pinyin: 'le', char: '了', tone: 0 },
+        ],
+        meaning: '银河笑了',
+      },
+    ],
+    quiz: [
+      { id: 'py-1-6-q1', question: '银河在看什么？', questionPinyin: 'Yín hé zài kàn shén me?', options: ['月亮', '星星', '太阳', '白云'], correctIndex: 1 },
+      { id: 'py-1-6-q2', question: '什么时候看星星？', questionPinyin: 'Shén me shí hou kàn xīng xing?', options: ['天亮了', '天黑了', '下雨了', '刮风了'], correctIndex: 1 },
+      { id: 'py-1-6-q3', question: '"kàn" 的声调是几声？', options: ['一声', '二声', '三声', '四声'], correctIndex: 3 },
+    ],
+  },
+  {
+    id: 'py-1-7',
+    title: '泰罗跑步',
+    titlePinyin: 'Tài luó pǎo bù',
+    module: 'pinyin',
+    level: 1,
+    rewardCardId: 'taiga-photon',
+    totalSentences: 5,
+    sentences: [
+      {
+        words: [
+          { pinyin: 'tài', char: '泰', tone: 4 },
+          { pinyin: 'luó', char: '罗', tone: 2 },
+          { pinyin: 'ài', char: '爱', tone: 4 },
+          { pinyin: 'pǎo', char: '跑', tone: 3 },
+          { pinyin: 'bù', char: '步', tone: 4 },
+        ],
+        meaning: '泰罗爱跑步',
+      },
+      {
+        words: [
+          { pinyin: 'tā', char: '他', tone: 1 },
+          { pinyin: 'pǎo', char: '跑', tone: 3 },
+          { pinyin: 'de', char: '得', tone: 0 },
+          { pinyin: 'hěn', char: '很', tone: 3 },
+          { pinyin: 'kuài', char: '快', tone: 4 },
+        ],
+        meaning: '他跑得很快',
+      },
+      {
+        words: [
+          { pinyin: 'fēng', char: '风', tone: 1 },
+          { pinyin: 'chuī', char: '吹', tone: 1 },
+          { pinyin: 'zài', char: '在', tone: 4 },
+          { pinyin: 'tā', char: '他', tone: 1 },
+          { pinyin: 'liǎn', char: '脸', tone: 3 },
+          { pinyin: 'shàng', char: '上', tone: 4 },
+        ],
+        meaning: '风吹在他脸上',
+      },
+      {
+        words: [
+          { pinyin: 'tā', char: '他', tone: 1 },
+          { pinyin: 'pǎo', char: '跑', tone: 3 },
+          { pinyin: 'le', char: '了', tone: 0 },
+          { pinyin: 'hěn', char: '很', tone: 3 },
+          { pinyin: 'jiǔ', char: '久', tone: 3 },
+        ],
+        meaning: '他跑了很久',
+      },
+      {
+        words: [
+          { pinyin: 'tài', char: '泰', tone: 4 },
+          { pinyin: 'luó', char: '罗', tone: 2 },
+          { pinyin: 'lèi', char: '累', tone: 4 },
+          { pinyin: 'le', char: '了', tone: 0 },
+          { pinyin: 'xiū', char: '休', tone: 1 },
+          { pinyin: 'xī', char: '息', tone: 1 },
+          { pinyin: 'ba', char: '吧', tone: 0 },
+        ],
+        meaning: '泰罗累了休息吧',
+      },
+    ],
+    quiz: [
+      { id: 'py-1-7-q1', question: '泰罗爱做什么？', questionPinyin: 'Tài luó ài zuò shén me?', options: ['游泳', '跑步', '跳高', '踢球'], correctIndex: 1 },
+      { id: 'py-1-7-q2', question: '泰罗跑得怎么样？', questionPinyin: 'Tài luó pǎo de zěn me yàng?', options: ['很慢', '很快', '很累', '很远'], correctIndex: 1 },
+      { id: 'py-1-7-q3', question: '"pǎo" 的声调是几声？', options: ['一声', '二声', '三声', '四声'], correctIndex: 2 },
+    ],
+  },
+
+  // ===== Level 2: Compound finals =====
+  {
+    id: 'py-2-1',
+    title: '银河去买东西',
+    titlePinyin: 'Yín hé qù mǎi dōng xi',
+    module: 'pinyin',
+    level: 2,
+    rewardCardId: 'ultraman',
+    totalSentences: 6,
+    sentences: [
+      {
+        words: [
+          { pinyin: 'yín', char: '银', tone: 2 },
+          { pinyin: 'hé', char: '河', tone: 2 },
+          { pinyin: 'yào', char: '要', tone: 4 },
+          { pinyin: 'qù', char: '去', tone: 4 },
+          { pinyin: 'mǎi', char: '买', tone: 3 },
+          { pinyin: 'dōng', char: '东', tone: 1 },
+          { pinyin: 'xi', char: '西', tone: 0 },
+        ],
+        meaning: '银河要去买东西',
+      },
+      {
+        words: [
+          { pinyin: 'tā', char: '他', tone: 1 },
+          { pinyin: 'dài', char: '带', tone: 4 },
+          { pinyin: 'le', char: '了', tone: 0 },
+          { pinyin: 'qián', char: '钱', tone: 2 },
+          { pinyin: 'bāo', char: '包', tone: 1 },
+        ],
+        meaning: '他带了钱包',
+      },
+      {
+        words: [
+          { pinyin: 'tā', char: '他', tone: 1 },
+          { pinyin: 'mǎi', char: '买', tone: 3 },
+          { pinyin: 'le', char: '了', tone: 0 },
+          { pinyin: 'niú', char: '牛', tone: 2 },
+          { pinyin: 'nǎi', char: '奶', tone: 3 },
+        ],
+        meaning: '他买了牛奶',
+      },
+      {
+        words: [
+          { pinyin: 'hái', char: '还', tone: 2 },
+          { pinyin: 'mǎi', char: '买', tone: 3 },
+          { pinyin: 'le', char: '了', tone: 0 },
+          { pinyin: 'miàn', char: '面', tone: 4 },
+          { pinyin: 'bāo', char: '包', tone: 1 },
+        ],
+        meaning: '还买了面包',
+      },
+      {
+        words: [
+          { pinyin: 'lǎo', char: '老', tone: 3 },
+          { pinyin: 'bǎn', char: '板', tone: 3 },
+          { pinyin: 'shuō', char: '说', tone: 1 },
+          { pinyin: 'xiè', char: '谢', tone: 4 },
+          { pinyin: 'xie', char: '谢', tone: 0 },
+        ],
+        meaning: '老板说谢谢',
+      },
+      {
+        words: [
+          { pinyin: 'yín', char: '银', tone: 2 },
+          { pinyin: 'hé', char: '河', tone: 2 },
+          { pinyin: 'gāo', char: '高', tone: 1 },
+          { pinyin: 'xìng', char: '兴', tone: 4 },
+          { pinyin: 'de', char: '地', tone: 0 },
+          { pinyin: 'huí', char: '回', tone: 2 },
+          { pinyin: 'jiā', char: '家', tone: 1 },
+        ],
+        meaning: '银河高兴地回家',
+      },
+    ],
+    quiz: [
+      { id: 'py-2-1-q1', question: '银河买了什么？', questionPinyin: 'Yín hé mǎi le shén me?', options: ['苹果和鸡蛋', '牛奶和面包', '鱼和肉', '糖和饼干'], correctIndex: 1 },
+      { id: 'py-2-1-q2', question: '"mǎi" 中的韵母是什么？', options: ['a', 'ai', 'ao', 'ou'], correctIndex: 1 },
+      { id: 'py-2-1-q3', question: '老板对银河说了什么？', questionPinyin: 'Lǎo bǎn duì yín hé shuō le shén me?', options: ['你好', '再见', '谢谢', '对不起'], correctIndex: 2 },
+    ],
+  },
+  {
+    id: 'py-2-2',
+    title: '泽塔的朋友',
+    titlePinyin: 'Zé tǎ de péng you',
+    module: 'pinyin',
+    level: 2,
+    rewardCardId: 'orb-spacium',
+    totalSentences: 6,
+    sentences: [
+      {
+        words: [
+          { pinyin: 'zé', char: '泽', tone: 2 },
+          { pinyin: 'tǎ', char: '塔', tone: 3 },
+          { pinyin: 'yǒu', char: '有', tone: 3 },
+          { pinyin: 'hěn', char: '很', tone: 3 },
+          { pinyin: 'duō', char: '多', tone: 1 },
+          { pinyin: 'péng', char: '朋', tone: 2 },
+          { pinyin: 'you', char: '友', tone: 0 },
+        ],
+        meaning: '泽塔有很多朋友',
+      },
+      {
+        words: [
+          { pinyin: 'dí', char: '迪', tone: 2 },
+          { pinyin: 'jiā', char: '迦', tone: 1 },
+          { pinyin: 'hěn', char: '很', tone: 3 },
+          { pinyin: 'yǒng', char: '勇', tone: 3 },
+          { pinyin: 'gǎn', char: '敢', tone: 3 },
+        ],
+        meaning: '迪迦很勇敢',
+      },
+      {
+        words: [
+          { pinyin: 'sài', char: '赛', tone: 4 },
+          { pinyin: 'luó', char: '罗', tone: 2 },
+          { pinyin: 'hěn', char: '很', tone: 3 },
+          { pinyin: 'cōng', char: '聪', tone: 1 },
+          { pinyin: 'míng', char: '明', tone: 2 },
+        ],
+        meaning: '赛罗很聪明',
+      },
+      {
+        words: [
+          { pinyin: 'yín', char: '银', tone: 2 },
+          { pinyin: 'hé', char: '河', tone: 2 },
+          { pinyin: 'hěn', char: '很', tone: 3 },
+          { pinyin: 'shàn', char: '善', tone: 4 },
+          { pinyin: 'liáng', char: '良', tone: 2 },
+        ],
+        meaning: '银河很善良',
+      },
+      {
+        words: [
+          { pinyin: 'tā', char: '他', tone: 1 },
+          { pinyin: 'men', char: '们', tone: 0 },
+          { pinyin: 'yì', char: '一', tone: 4 },
+          { pinyin: 'qǐ', char: '起', tone: 3 },
+          { pinyin: 'bǎo', char: '保', tone: 3 },
+          { pinyin: 'hù', char: '护', tone: 4 },
+          { pinyin: 'dì', char: '地', tone: 4 },
+          { pinyin: 'qiú', char: '球', tone: 2 },
+        ],
+        meaning: '他们一起保护地球',
+      },
+      {
+        words: [
+          { pinyin: 'zé', char: '泽', tone: 2 },
+          { pinyin: 'tǎ', char: '塔', tone: 3 },
+          { pinyin: 'ài', char: '爱', tone: 4 },
+          { pinyin: 'tā', char: '他', tone: 1 },
+          { pinyin: 'de', char: '的', tone: 0 },
+          { pinyin: 'péng', char: '朋', tone: 2 },
+          { pinyin: 'you', char: '友', tone: 0 },
+          { pinyin: 'men', char: '们', tone: 0 },
+        ],
+        meaning: '泽塔爱他的朋友们',
+      },
+    ],
+    quiz: [
+      { id: 'py-2-2-q1', question: '迪迦是什么样的？', questionPinyin: 'Dí jiā shì shén me yàng de?', options: ['聪明', '勇敢', '善良', '快乐'], correctIndex: 1 },
+      { id: 'py-2-2-q2', question: '他们一起做什么？', questionPinyin: 'Tā men yì qǐ zuò shén me?', options: ['玩游戏', '吃饭', '保护地球', '看书'], correctIndex: 2 },
+      { id: 'py-2-2-q3', question: '"péng" 的韵母是什么？', options: ['en', 'eng', 'ang', 'ong'], correctIndex: 1 },
+    ],
+  },
+
+  // ===== Level 3: Complex finals + tone practice =====
+  {
+    id: 'py-3-1',
+    title: '奥特曼比赛',
+    titlePinyin: 'Ào tè màn bǐ sài',
+    module: 'pinyin',
+    level: 3,
+    rewardCardId: 'gaia-v2',
+    totalSentences: 7,
+    sentences: [
+      {
+        words: [
+          { pinyin: 'guāng', char: '光', tone: 1 },
+          { pinyin: 'zhī', char: '之', tone: 1 },
+          { pinyin: 'guó', char: '国', tone: 2 },
+          { pinyin: 'yào', char: '要', tone: 4 },
+          { pinyin: 'bǐ', char: '比', tone: 3 },
+          { pinyin: 'sài', char: '赛', tone: 4 },
+          { pinyin: 'le', char: '了', tone: 0 },
+        ],
+        meaning: '光之国要比赛了',
+      },
+      {
+        words: [
+          { pinyin: 'dí', char: '迪', tone: 2 },
+          { pinyin: 'jiā', char: '迦', tone: 1 },
+          { pinyin: 'cān', char: '参', tone: 1 },
+          { pinyin: 'jiā', char: '加', tone: 1 },
+          { pinyin: 'fēi', char: '飞', tone: 1 },
+          { pinyin: 'xíng', char: '行', tone: 2 },
+          { pinyin: 'bǐ', char: '比', tone: 3 },
+          { pinyin: 'sài', char: '赛', tone: 4 },
+        ],
+        meaning: '迪迦参加飞行比赛',
+      },
+      {
+        words: [
+          { pinyin: 'sài', char: '赛', tone: 4 },
+          { pinyin: 'luó', char: '罗', tone: 2 },
+          { pinyin: 'cān', char: '参', tone: 1 },
+          { pinyin: 'jiā', char: '加', tone: 1 },
+          { pinyin: 'quán', char: '拳', tone: 2 },
+          { pinyin: 'jī', char: '击', tone: 1 },
+          { pinyin: 'bǐ', char: '比', tone: 3 },
+          { pinyin: 'sài', char: '赛', tone: 4 },
+        ],
+        meaning: '赛罗参加拳击比赛',
+      },
+      {
+        words: [
+          { pinyin: 'zé', char: '泽', tone: 2 },
+          { pinyin: 'tǎ', char: '塔', tone: 3 },
+          { pinyin: 'cān', char: '参', tone: 1 },
+          { pinyin: 'jiā', char: '加', tone: 1 },
+          { pinyin: 'lì', char: '力', tone: 4 },
+          { pinyin: 'liàng', char: '量', tone: 4 },
+          { pinyin: 'bǐ', char: '比', tone: 3 },
+          { pinyin: 'sài', char: '赛', tone: 4 },
+        ],
+        meaning: '泽塔参加力量比赛',
+      },
+      {
+        words: [
+          { pinyin: 'guān', char: '观', tone: 1 },
+          { pinyin: 'zhòng', char: '众', tone: 4 },
+          { pinyin: 'dà', char: '大', tone: 4 },
+          { pinyin: 'shēng', char: '声', tone: 1 },
+          { pinyin: 'huān', char: '欢', tone: 1 },
+          { pinyin: 'hū', char: '呼', tone: 1 },
+        ],
+        meaning: '观众大声欢呼',
+      },
+      {
+        words: [
+          { pinyin: 'měi', char: '每', tone: 3 },
+          { pinyin: 'gè', char: '个', tone: 4 },
+          { pinyin: 'rén', char: '人', tone: 2 },
+          { pinyin: 'dōu', char: '都', tone: 1 },
+          { pinyin: 'hěn', char: '很', tone: 3 },
+          { pinyin: 'bàng', char: '棒', tone: 4 },
+        ],
+        meaning: '每个人都很棒',
+      },
+      {
+        words: [
+          { pinyin: 'dà', char: '大', tone: 4 },
+          { pinyin: 'jiā', char: '家', tone: 1 },
+          { pinyin: 'yì', char: '一', tone: 4 },
+          { pinyin: 'qǐ', char: '起', tone: 3 },
+          { pinyin: 'lǐng', char: '领', tone: 3 },
+          { pinyin: 'jiǎng', char: '奖', tone: 3 },
+        ],
+        meaning: '大家一起领奖',
+      },
+    ],
+    quiz: [
+      { id: 'py-3-1-q1', question: '迪迦参加什么比赛？', questionPinyin: 'Dí jiā cān jiā shén me bǐ sài?', options: ['拳击比赛', '飞行比赛', '力量比赛', '跑步比赛'], correctIndex: 1 },
+      { id: 'py-3-1-q2', question: '观众做了什么？', questionPinyin: 'Guān zhòng zuò le shén me?', options: ['哭了', '走了', '欢呼', '睡觉'], correctIndex: 2 },
+      { id: 'py-3-1-q3', question: '"quán" 中的韵母是什么？', options: ['an', 'uan', 'üan', 'en'], correctIndex: 1 },
+    ],
+  },
+  {
+    id: 'py-3-2',
+    title: '光之国',
+    titlePinyin: 'Guāng zhī guó',
+    module: 'pinyin',
+    level: 3,
+    rewardCardId: 'nexus',
+    totalSentences: 7,
+    sentences: [
+      {
+        words: [
+          { pinyin: 'guāng', char: '光', tone: 1 },
+          { pinyin: 'zhī', char: '之', tone: 1 },
+          { pinyin: 'guó', char: '国', tone: 2 },
+          { pinyin: 'zài', char: '在', tone: 4 },
+          { pinyin: 'hěn', char: '很', tone: 3 },
+          { pinyin: 'yuǎn', char: '远', tone: 3 },
+          { pinyin: 'de', char: '的', tone: 0 },
+          { pinyin: 'dì', char: '地', tone: 4 },
+          { pinyin: 'fāng', char: '方', tone: 1 },
+        ],
+        meaning: '光之国在很远的地方',
+      },
+      {
+        words: [
+          { pinyin: 'nà', char: '那', tone: 4 },
+          { pinyin: 'lǐ', char: '里', tone: 3 },
+          { pinyin: 'dào', char: '到', tone: 4 },
+          { pinyin: 'chù', char: '处', tone: 4 },
+          { pinyin: 'dōu', char: '都', tone: 1 },
+          { pinyin: 'shì', char: '是', tone: 4 },
+          { pinyin: 'guāng', char: '光', tone: 1 },
+        ],
+        meaning: '那里到处都是光',
+      },
+      {
+        words: [
+          { pinyin: 'gāo', char: '高', tone: 1 },
+          { pinyin: 'gāo', char: '高', tone: 1 },
+          { pinyin: 'de', char: '的', tone: 0 },
+          { pinyin: 'tǎ', char: '塔', tone: 3 },
+          { pinyin: 'shǎn', char: '闪', tone: 3 },
+          { pinyin: 'shǎn', char: '闪', tone: 3 },
+          { pinyin: 'fā', char: '发', tone: 1 },
+          { pinyin: 'liàng', char: '亮', tone: 4 },
+        ],
+        meaning: '高高的塔闪闪发亮',
+      },
+      {
+        words: [
+          { pinyin: 'ào', char: '奥', tone: 4 },
+          { pinyin: 'tè', char: '特', tone: 4 },
+          { pinyin: 'màn', char: '曼', tone: 4 },
+          { pinyin: 'men', char: '们', tone: 0 },
+          { pinyin: 'zhù', char: '住', tone: 4 },
+          { pinyin: 'zài', char: '在', tone: 4 },
+          { pinyin: 'zhè', char: '这', tone: 4 },
+          { pinyin: 'lǐ', char: '里', tone: 3 },
+        ],
+        meaning: '奥特曼们住在这里',
+      },
+      {
+        words: [
+          { pinyin: 'tā', char: '他', tone: 1 },
+          { pinyin: 'men', char: '们', tone: 0 },
+          { pinyin: 'měi', char: '每', tone: 3 },
+          { pinyin: 'tiān', char: '天', tone: 1 },
+          { pinyin: 'xùn', char: '训', tone: 4 },
+          { pinyin: 'liàn', char: '练', tone: 4 },
+        ],
+        meaning: '他们每天训练',
+      },
+      {
+        words: [
+          { pinyin: 'tā', char: '他', tone: 1 },
+          { pinyin: 'men', char: '们', tone: 0 },
+          { pinyin: 'bǎo', char: '保', tone: 3 },
+          { pinyin: 'hù', char: '护', tone: 4 },
+          { pinyin: 'yǔ', char: '宇', tone: 3 },
+          { pinyin: 'zhòu', char: '宙', tone: 4 },
+          { pinyin: 'hé', char: '和', tone: 2 },
+          { pinyin: 'píng', char: '平', tone: 2 },
+        ],
+        meaning: '他们保护宇宙和平',
+      },
+      {
+        words: [
+          { pinyin: 'guāng', char: '光', tone: 1 },
+          { pinyin: 'zhī', char: '之', tone: 1 },
+          { pinyin: 'guó', char: '国', tone: 2 },
+          { pinyin: 'zhēn', char: '真', tone: 1 },
+          { pinyin: 'měi', char: '美', tone: 3 },
+          { pinyin: 'lì', char: '丽', tone: 4 },
+        ],
+        meaning: '光之国真美丽',
+      },
+    ],
+    quiz: [
+      { id: 'py-3-2-q1', question: '光之国在哪里？', questionPinyin: 'Guāng zhī guó zài nǎ lǐ?', options: ['很近的地方', '很远的地方', '地球上', '海里'], correctIndex: 1 },
+      { id: 'py-3-2-q2', question: '奥特曼们每天做什么？', questionPinyin: 'Ào tè màn men měi tiān zuò shén me?', options: ['睡觉', '玩游戏', '训练', '吃饭'], correctIndex: 2 },
+      { id: 'py-3-2-q3', question: '"guāng" 的声调是几声？', options: ['一声', '二声', '三声', '四声'], correctIndex: 0 },
+    ],
+  },
+]
+
+export function getPinyinStoriesByLevel(level: Level): PinyinStory[] {
+  return allPinyinStories.filter(s => s.level === level)
+}
+
+export function getPinyinStoryById(id: string): PinyinStory | undefined {
+  return allPinyinStories.find(s => s.id === id)
+}

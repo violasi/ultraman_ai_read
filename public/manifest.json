@@ -1,0 +1,17 @@
+{
+  "name": "奥特曼日记",
+  "short_name": "奥特曼日记",
+  "description": "帮助孩子通过奥特曼故事提高阅读能力",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f9fafb",
+  "theme_color": "#c0392b",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
