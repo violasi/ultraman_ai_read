@@ -1,73 +1,63 @@
-# React + TypeScript + Vite
+# 奥特曼日记 · 儿童自主阅读工具
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+专为喜欢奥特曼的小朋友设计的自主阅读应用，用孩子感兴趣的奥特曼故事做内容，让阅读变得轻松又有成就感。
 
-Currently, two official plugins are available:
+## 功能特色
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **三大阅读模式**：汉字阅读（智能标注拼音）、拼音阅读（声调颜色区分）、英语阅读（自然拼读）
+- **智能识字追踪**：自动判断生字/熟字，阅读中未点击的生字自动标记为已学会
+- **奥特曼卡片收集**：110 张卡片、54 个角色，读故事答题解锁，含普通/稀有/传说三种稀有度
+- **25 个成就里程碑**：连续阅读、阅读量、词汇量、收集进度等多维度激励
+- **故事工坊**：支持 AI 生成新故事（OpenAI API 或手动导入），内容永远不会看完
+- **存档系统**：本地存储，支持导出/导入，换设备无忧
 
-## React Compiler
+## 技术栈
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+| 项目 | 技术 |
+|------|------|
+| 框架 | React 19 + TypeScript + Vite |
+| 样式 | Tailwind CSS |
+| 路由 | React Router (Hash 模式) |
+| 移动端 | Capacitor (Android) |
+| 语音 | Web Speech API / Capacitor TTS |
+| 存储 | localStorage |
 
-## Expanding the ESLint configuration
+## 快速开始
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+```bash
+# 安装依赖
+npm install
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+# 启动开发服务器
+npm run dev
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# 构建生产版本
+npm run build
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 项目结构
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
 ```
+src/
+├── components/       # UI 组件（布局 + 共享）
+├── context/          # 全局状态管理 (AppContext)
+├── data/             # 故事数据、卡片、成就、汉字表
+├── hooks/            # 自定义 hooks (TTS, 进度, 奖励, 生词)
+├── lib/              # 工具函数 (存储, TTS, 拼音)
+├── pages/            # 页面组件
+│   ├── chinese/      # 汉字阅读模块
+│   ├── pinyin/       # 拼音阅读模块
+│   └── english/      # 英语阅读模块
+├── types/            # TypeScript 类型定义
+└── router.tsx        # 路由配置
+```
+
+## 内容数据
+
+- 内置 22 篇故事（汉字 9 + 拼音 6 + 英语 7），各分 3 个难度等级
+- 预设 100 个常用汉字作为初始已知字库
+- 支持通过故事工坊无限扩展内容
+
+## 许可
+
+个人项目，免费分享使用。
