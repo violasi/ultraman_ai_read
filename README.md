@@ -4,12 +4,19 @@
 
 ## 快速开始
 
+**前置条件**：安装 [Node.js](https://nodejs.org/)（建议 v18+，自带 npm），Windows / Mac / Linux 均可。
+
 ```bash
+# 1. 安装项目依赖（React、Vite、Tailwind 等，只需运行一次）
 npm install
+
+# 2. 启动开发服务器
 npm run dev
 ```
 
-打开浏览器访问 `http://localhost:5173`。
+打开浏览器访问 `http://localhost:5173`，即可使用。
+
+> 项目本身不包含绘本内容（版权原因），首次打开绘本馆会是空的，需要自行导入，见下方说明。
 
 ## 功能一览
 
