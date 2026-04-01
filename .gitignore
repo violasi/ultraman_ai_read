@@ -33,3 +33,6 @@ dist/
 # Large book data (not suitable for git)
 library/
 public/books/
+
+# Claude worktrees
+.claude/worktrees/

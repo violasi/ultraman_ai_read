@@ -61,7 +61,7 @@ export default function VocabReviewPage() {
       // 2. Gather picture book page items, split by read/unread
       try {
         const catalog = await loadCatalog()
-        const booksWithChar = catalog.filter(m => m.uniqueChars.includes(char))
+        const booksWithChar = catalog.filter(m => char && m.uniqueChars.includes(char))
 
         // Prioritize read books first in iteration order
         const sortedBooks = [

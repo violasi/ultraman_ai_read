@@ -23,7 +23,7 @@ const PUNCTUATION = new Set([
 export function validateBookJson(
   jsonStr: string,
   expectedPageCount: number,
-  bookId: string,
+  _bookId: string,
   imagePathFn: (pageIndex: number) => string,
 ): ValidationResult {
   let parsed: unknown

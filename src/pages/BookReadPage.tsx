@@ -19,7 +19,7 @@ export default function BookReadPage() {
   const hero = getCharacterById(heroId)
 
   const { isKnownChar, addDiaryEntry, addBookReadRecord, getBookReadCountForHero } = useApp()
-  const { handleCharClick, processReadingResult, clickedCharsRef } = useReadingTracker()
+  const { handleCharClick, processReadingResult } = useReadingTracker()
   const { speakChinese } = useTTS()
 
   const [book, setBook] = useState<PictureBook | null>(null)

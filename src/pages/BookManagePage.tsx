@@ -92,32 +92,6 @@ export default function BookManagePage() {
 
   const bookId = `user-${Date.now()}`
 
-  const handleValidate = () => {
-    const result = validateBookJson(
-      jsonInput,
-      images.length,
-      bookId,
-      (pageIndex) => makeIdbPath(bookId, pageIndex),
-    )
-    if (result.ok) {
-      const book: PictureBook = {
-        id: bookId,
-        title: title.trim(),
-        series: series.trim() || '用户上传',
-        level: level.trim() || '',
-        pageCount: images.length,
-        uniqueChars: result.uniqueChars,
-        coverImage: makeIdbPath(bookId, 0),
-        pages: result.pages,
-      }
-      setValidatedBook(book)
-      setValidationMsg({ ok: true, msg: `验证通过！${result.pages.length} 页，${result.uniqueChars.length} 个生字` })
-    } else {
-      setValidationMsg({ ok: false, msg: result.error })
-      setValidatedBook(null)
-    }
-  }
-
   // --- Save ---
 
   const handleSave = async () => {
