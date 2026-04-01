@@ -1,20 +1,18 @@
 import { createHashRouter } from 'react-router-dom'
 import AppShell from './components/layout/AppShell'
 import HomePage from './pages/HomePage'
-import KnownCharsPage from './pages/KnownCharsPage'
-import ChineseHome from './pages/chinese/ChineseHome'
-import ChineseStory from './pages/chinese/ChineseStory'
-import ChineseQuiz from './pages/chinese/ChineseQuiz'
-import PinyinHome from './pages/pinyin/PinyinHome'
-import PinyinStory from './pages/pinyin/PinyinStory'
-import PinyinQuiz from './pages/pinyin/PinyinQuiz'
-import EnglishHome from './pages/english/EnglishHome'
-import EnglishStory from './pages/english/EnglishStory'
-import EnglishQuiz from './pages/english/EnglishQuiz'
-import VocabBook from './pages/VocabBook'
-import RewardsPage from './pages/RewardsPage'
-import StoryWorkshop from './pages/StoryWorkshop'
-import SaveLoadPage from './pages/SaveLoadPage'
+import StoryReadPage from './pages/StoryReadPage'
+import DiaryPage from './pages/DiaryPage'
+import DiaryReadPage from './pages/DiaryReadPage'
+import HeroHallPage from './pages/HeroHallPage'
+import HeroDetailPage from './pages/HeroDetailPage'
+import VocabBookPage from './pages/VocabBook'
+import SettingsPage from './pages/SettingsPage'
+import BookSelectPage from './pages/BookSelectPage'
+import BookReadPage from './pages/BookReadPage'
+import BookLibraryPage from './pages/BookLibraryPage'
+import BookManagePage from './pages/BookManagePage'
+import VocabReviewPage from './pages/VocabReviewPage'
 
 export const router = createHashRouter([
   {
@@ -22,20 +20,18 @@ export const router = createHashRouter([
     element: <AppShell />,
     children: [
       { index: true, element: <HomePage /> },
-      { path: 'chinese', element: <ChineseHome /> },
-      { path: 'chinese/story/:id', element: <ChineseStory /> },
-      { path: 'chinese/quiz/:id', element: <ChineseQuiz /> },
-      { path: 'pinyin', element: <PinyinHome /> },
-      { path: 'pinyin/story/:id', element: <PinyinStory /> },
-      { path: 'pinyin/quiz/:id', element: <PinyinQuiz /> },
-      { path: 'english', element: <EnglishHome /> },
-      { path: 'english/story/:id', element: <EnglishStory /> },
-      { path: 'english/quiz/:id', element: <EnglishQuiz /> },
-      { path: 'vocab', element: <VocabBook /> },
-      { path: 'rewards', element: <RewardsPage /> },
-      { path: 'known-chars', element: <KnownCharsPage /> },
-      { path: 'workshop', element: <StoryWorkshop /> },
-      { path: 'save', element: <SaveLoadPage /> },
+      { path: 'read/:id', element: <StoryReadPage /> },
+      { path: 'books', element: <BookSelectPage /> },
+      { path: 'books/library', element: <BookLibraryPage /> },
+      { path: 'books/read/:bookId', element: <BookReadPage /> },
+      { path: 'books/manage', element: <BookManagePage /> },
+      { path: 'diary', element: <DiaryPage /> },
+      { path: 'diary/:id', element: <DiaryReadPage /> },
+      { path: 'heroes', element: <HeroHallPage /> },
+      { path: 'heroes/:heroId', element: <HeroDetailPage /> },
+      { path: 'vocab', element: <VocabBookPage /> },
+      { path: 'vocab/review/:char', element: <VocabReviewPage /> },
+      { path: 'settings', element: <SettingsPage /> },
     ],
   },
 ])

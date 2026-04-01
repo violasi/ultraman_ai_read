@@ -28,3 +28,7 @@ dist-ssr
 *.zip
 android/
 .Rhistory
+
+# Large book data (not suitable for git)
+library/
+public/books/

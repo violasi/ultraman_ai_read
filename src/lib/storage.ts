@@ -1,25 +1,21 @@
 const KEYS = {
-  PROGRESS: 'orange_read_progress',
-  VOCAB: 'orange_read_vocab',
-  CARDS: 'orange_read_cards',
-  SETTINGS: 'orange_read_settings',
-  KNOWN_CHARS: 'orange_read_known_chars',
+  DIARY_ENTRIES: 'ultraman_diary_entries',
+  KNOWN_CHARS: 'ultraman_diary_known_chars',
+  VOCAB: 'ultraman_diary_vocab',
+  OPENAI_KEY: 'ultraman_diary_openai_key',
+  SETTINGS: 'ultraman_diary_settings',
+  BOOK_READ_RECORDS: 'ultraman_diary_book_records',
+  REWARD_CARDS: 'ultraman_diary_reward_cards',
 } as const
 
-// All localStorage keys used by the app (for export/import)
 const ALL_STORAGE_KEYS = [
-  'orange_read_progress',
-  'orange_read_vocab',
-  'orange_read_cards',
-  'orange_read_settings',
-  'orange_read_known_chars',
-  'orange_read_custom_stories',
-  'orange_read_milestones',
-  'orange_read_streak',
-  'orange_read_char_encounters',
-  'orange_read_initial_chars_count',
-  'orange_read_openai_key',
-  'orange_read_last_workshop',
+  KEYS.DIARY_ENTRIES,
+  KEYS.KNOWN_CHARS,
+  KEYS.VOCAB,
+  KEYS.OPENAI_KEY,
+  KEYS.SETTINGS,
+  KEYS.BOOK_READ_RECORDS,
+  KEYS.REWARD_CARDS,
 ] as const
 
 export function getItem<T>(key: string, fallback: T): T {
@@ -36,12 +32,9 @@ export function setItem<T>(key: string, value: T): void {
 }
 
 export interface SaveSummary {
-  cards: number
-  stars: number
   knownChars: number
   vocabWords: number
-  streak: number
-  stories: number
+  diaryEntries: number
 }
 
 export interface SaveFile {
@@ -52,19 +45,13 @@ export interface SaveFile {
 }
 
 function buildSummary(): SaveSummary {
-  const cards = getItem<Record<string, { unlocked: boolean }>>('orange_read_cards', {})
-  const progress = getItem<{ stories: Record<string, { completed: boolean; quizScore: number }>; totalStars: number }>('orange_read_progress', { stories: {}, totalStars: 0 })
-  const knownChars = getItem<string[]>('orange_read_known_chars', [])
-  const vocab = getItem<unknown[]>('orange_read_vocab', [])
-  const streak = getItem<{ currentStreak: number }>('orange_read_streak', { currentStreak: 0 })
-
+  const knownChars = getItem<string[]>(KEYS.KNOWN_CHARS, [])
+  const vocab = getItem<unknown[]>(KEYS.VOCAB, [])
+  const entries = getItem<unknown[]>(KEYS.DIARY_ENTRIES, [])
   return {
-    cards: Object.values(cards).filter(c => c.unlocked).length,
-    stars: progress.totalStars,
     knownChars: knownChars.length,
     vocabWords: vocab.length,
-    streak: streak.currentStreak,
-    stories: Object.values(progress.stories).filter(s => s.completed).length,
+    diaryEntries: entries.length,
   }
 }
 
@@ -89,7 +76,6 @@ export function parseSaveFile(json: string): { ok: true; save: SaveFile } | { ok
     const parsed = JSON.parse(json)
     if (!parsed || typeof parsed !== 'object') return { ok: false, error: '文件格式错误' }
     if (!parsed.data || typeof parsed.data !== 'object') return { ok: false, error: '存档数据缺失' }
-    if (!parsed.summary) return { ok: false, error: '存档摘要缺失' }
     return { ok: true, save: parsed as SaveFile }
   } catch {
     return { ok: false, error: '无法解析文件，请确认是正确的存档文件' }
