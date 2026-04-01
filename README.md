@@ -2,7 +2,13 @@
 
 专为喜欢奥特曼的小朋友设计的中文阅读应用。选一个奥特曼陪你读绘本、写日记，认识更多汉字！
 
-## 快速开始
+## 在线体验
+
+直接访问：**https://ultraman-ai-read.edgeone.dev**
+
+无需安装，打开即用。
+
+## 本地开发
 
 **前置条件**：安装 [Node.js](https://nodejs.org/)（建议 v18+，自带 npm），Windows / Mac / Linux 均可。
 
