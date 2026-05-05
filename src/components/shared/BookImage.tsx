@@ -42,7 +42,7 @@ export default function BookImage({ src, alt = '', className = '' }: BookImagePr
 
   if (error || !resolvedSrc) {
     return (
-      <div className={`flex items-center justify-center bg-[#FFF8F0] text-gray-300 ${className}`}>
+      <div className={`flex items-center justify-center bg-[var(--color-bg-warm)] text-gray-300 ${className}`}>
         <span className="text-3xl">📄</span>
       </div>
     )

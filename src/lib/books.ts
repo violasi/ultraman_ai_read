@@ -51,7 +51,7 @@ export async function deleteBook(bookId: string): Promise<void> {
 }
 
 export function computeKnownRatio(meta: PictureBookMeta, knownChars: Set<string>): number {
-  if (meta.uniqueChars.length === 0) return 1
+  if (!meta.uniqueChars || meta.uniqueChars.length === 0) return 1
   const known = meta.uniqueChars.filter(c => knownChars.has(c)).length
   return known / meta.uniqueChars.length
 }

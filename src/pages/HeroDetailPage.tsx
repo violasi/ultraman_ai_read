@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { useApp } from '../context/AppContext'
-import { getCharacterById } from '../data/ultramanCharacters'
+import { getCharacterById, theme } from '../config/theme'
 import UltramanAvatar from '../components/shared/UltramanAvatar'
 
 export default function HeroDetailPage() {
@@ -17,9 +17,9 @@ export default function HeroDetailPage() {
   if (!character || !heroId) {
     return (
       <div className="py-12 text-center text-gray-400">
-        <p>找不到这个英雄</p>
-        <button onClick={() => navigate('/heroes')} className="mt-4 text-[#E8453C] font-bold">
-          返回英雄馆
+        <p>{theme.labels.notFoundHero}</p>
+        <button onClick={() => navigate('/heroes')} className="mt-4 text-[var(--color-primary)] font-bold">
+          {theme.labels.backToHall}
         </button>
       </div>
     )
@@ -35,27 +35,27 @@ export default function HeroDetailPage() {
         onClick={() => navigate('/heroes')}
         className="text-sm text-gray-500 font-bold flex items-center gap-1"
       >
-        ← 英雄馆
+        {theme.labels.backToHall}
       </button>
 
       {/* Hero info */}
       <div className="flex flex-col items-center gap-3">
         <UltramanAvatar character={character} size="lg" />
         <h2 className="text-xl font-black text-gray-800">{character.name}</h2>
-        <div className="bg-[#E8453C]/10 text-[#E8453C] text-sm font-bold px-4 py-1.5 rounded-full">
+        <div className="bg-[var(--color-primary)]/10 text-[var(--color-primary)] text-sm font-bold px-4 py-1.5 rounded-full">
           陪伴了 {stat?.daysAccompanied ?? 0} 天
         </div>
       </div>
 
       {/* Next card progress */}
       {daysToNext > 0 && (
-        <div className="bg-[#FFF8F0] rounded-2xl p-4 border border-[#E8DED5]">
+        <div className="bg-[var(--color-bg-warm)] rounded-2xl p-4 border border-[var(--color-border)]">
           <p className="text-sm text-gray-600 text-center">
-            再陪伴 <span className="text-[#E8453C] font-black">{daysToNext}</span> 天就能获得下一张卡片！
+            再陪伴 <span className="text-[var(--color-primary)] font-black">{daysToNext}</span> 天就能获得下一张卡片！
           </p>
           <div className="mt-2 h-2 bg-gray-100 rounded-full overflow-hidden">
             <div
-              className="h-full bg-[#E8453C] rounded-full transition-all"
+              className="h-full bg-[var(--color-primary)] rounded-full transition-all"
               style={{ width: `${Math.min(100, ((stat?.daysAccompanied ?? 0) % 3) / 3 * 100)}%` }}
             />
           </div>
@@ -69,7 +69,7 @@ export default function HeroDetailPage() {
         </h3>
 
         {cards.length === 0 ? (
-          <div className="bg-[#FFF8F0] rounded-2xl p-8 border border-[#E8DED5] text-center">
+          <div className="bg-[var(--color-bg-warm)] rounded-2xl p-8 border border-[var(--color-border)] text-center">
             <span className="text-4xl">🎴</span>
             <p className="text-sm text-gray-400 mt-2">还没有获得卡片，继续加油！</p>
           </div>
@@ -115,10 +115,10 @@ function CardThumbnail({ imageUrl, level, heroName, onView }: {
 
   return (
     <div
-      className="bg-white rounded-2xl border border-[#E8DED5] shadow-sm overflow-hidden cursor-pointer active:scale-95 transition-transform"
+      className="bg-white rounded-2xl border border-[var(--color-border)] shadow-sm overflow-hidden cursor-pointer active:scale-95 transition-transform"
       onClick={onView}
     >
-      <div className="aspect-square flex items-center justify-center bg-[#FFF8F0]">
+      <div className="aspect-square flex items-center justify-center bg-[var(--color-bg-warm)]">
         {!imgError ? (
           <img
             src={imageUrl}
@@ -145,7 +145,7 @@ function CardImage({ src, alt, className }: { src: string; alt: string; classNam
 
   if (imgError) {
     return (
-      <div className={`bg-[#FFF8F0] rounded-2xl p-12 flex flex-col items-center gap-3 text-gray-400 ${className}`}>
+      <div className={`bg-[var(--color-bg-warm)] rounded-2xl p-12 flex flex-col items-center gap-3 text-gray-400 ${className}`}>
         <span className="text-6xl">🃏</span>
         <span className="text-sm">卡片图片待补充</span>
       </div>

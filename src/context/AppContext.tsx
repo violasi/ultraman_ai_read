@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useMemo, useCallback, type ReactNode } from 'react'
-import { KEYS, getItem, setItem } from '../lib/storage'
+import { KEYS, getItem, setItem, createAutoBackup } from '../lib/storage'
 import { DEFAULT_KNOWN_CHARACTERS } from '../data/defaultKnownChars'
-import { ULTRAMAN_CHARACTERS } from '../data/ultramanCharacters'
+import { CHARACTERS } from '../config/theme'
 import type { DiaryEntry, VocabEntry, HeroStat } from '../types/diary'
 import type { BookReadRecord } from '../types/picturebook'
 import type { RewardCard } from '../types/reward'
@@ -106,7 +106,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       const card: RewardCard = {
         heroId,
         level: newLevel,
-        imageUrl: `/images/rewards/${heroId}_gift_${newLevel}.png`,
+        imageUrl: `./images/rewards/${heroId}_gift_${newLevel}.png`,
         earnedAt: new Date().toISOString(),
       }
       const next = [...currentCards, card]
@@ -129,6 +129,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         const days = computeHeroDays(heroId, next, bookReadRecords)
         cards = checkAndGrantRewards(heroId, days, cards)
       }
+      setTimeout(createAutoBackup, 100) // backup after state settles
       return next
     })
   }, [bookReadRecords, computeHeroDays, checkAndGrantRewards])
@@ -230,6 +231,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       const days = computeHeroDays(record.heroId, diaryEntries, next)
       const cards = getItem<RewardCard[]>(KEYS.REWARD_CARDS, [])
       checkAndGrantRewards(record.heroId, days, cards)
+      setTimeout(createAutoBackup, 100)
       return next
     })
   }, [diaryEntries, computeHeroDays, checkAndGrantRewards])
@@ -259,7 +261,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
       if (!daysByHero[record.heroId]) daysByHero[record.heroId] = new Set()
       daysByHero[record.heroId].add(record.date)
     }
-    return ULTRAMAN_CHARACTERS
+    return CHARACTERS
       .map(c => ({
         id: c.id,
         name: c.name,

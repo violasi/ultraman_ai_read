@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { getCharacterById } from '../../data/ultramanCharacters'
+import { getCharacterById } from '../../config/theme'
 import UltramanAvatar from './UltramanAvatar'
 import type { RewardCard } from '../../types/reward'
 
@@ -40,9 +40,9 @@ export default function RewardCelebration({ card, onDismiss }: Props) {
           🎉
         </div>
 
-        <div className="bg-gradient-to-b from-[#FFF8F0] to-[#FFE8D0] rounded-3xl border-2 border-[#E8453C]/30 shadow-xl overflow-hidden">
+        <div className="bg-gradient-to-b from-[var(--color-bg-warm)] to-[var(--color-gradient-end)] rounded-3xl border-2 border-[var(--color-primary)]/30 shadow-xl overflow-hidden">
           {/* Header */}
-          <div className="bg-[#E8453C] text-white text-center py-3 px-4">
+          <div className="bg-[var(--color-primary)] text-white text-center py-3 px-4">
             <p className="text-lg font-black">恭喜获得新卡片！</p>
           </div>
 
@@ -58,7 +58,7 @@ export default function RewardCelebration({ card, onDismiss }: Props) {
             </p>
 
             {/* Reward card image */}
-            <div className="w-full aspect-[4/5] rounded-2xl overflow-hidden border-2 border-[#E8DED5] bg-white flex items-center justify-center">
+            <div className="w-full aspect-[4/5] rounded-2xl overflow-hidden border-2 border-[var(--color-border)] bg-white flex items-center justify-center">
               {!imgError ? (
                 <img
                   src={card.imageUrl}
@@ -77,7 +77,7 @@ export default function RewardCelebration({ card, onDismiss }: Props) {
             {/* Dismiss button */}
             <button
               onClick={handleDismiss}
-              className="w-full bg-[#E8453C] text-white font-bold py-3 rounded-xl active:scale-95 transition-transform"
+              className="w-full bg-[var(--color-primary)] text-white font-bold py-3 rounded-xl active:scale-95 transition-transform"
             >
               太棒了！收下卡片
             </button>
