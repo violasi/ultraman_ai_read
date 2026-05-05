@@ -33,6 +33,24 @@ dist/
 # Large book data (not suitable for git)
 library/
 public/books/
+library_for_all/
+
+# Built/deployed app snapshots (root-level only)
+/ultraman-dairy/
+/elsa-diary/
+/pawpatrol/
+
+# Personal data backups
+ultraman-diary-backup-*.json
+
+# License + customer data
+licenses.json
+
+# Audit notes (may contain personal info)
+audit/
+
+# Python caches
+__pycache__/
 
 # Claude worktrees
 .claude/worktrees/
