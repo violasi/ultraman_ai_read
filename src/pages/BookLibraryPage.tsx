@@ -141,7 +141,7 @@ export default function BookLibraryPage() {
                             key={hid}
                             src={hero.imageUrl}
                             alt={hero.shortName}
-                            className="w-5 h-5 rounded-full border border-white object-cover"
+                            className="w-10 h-10 rounded-full border border-white object-cover"
                           />
                         )
                       })}
