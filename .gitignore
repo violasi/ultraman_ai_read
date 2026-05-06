@@ -52,5 +52,7 @@ audit/
 # Python caches
 __pycache__/
 
-# Claude worktrees
+# Claude per-machine config (keep local, don't track)
+.claude/launch.json
+.claude/settings.local.json
 .claude/worktrees/
