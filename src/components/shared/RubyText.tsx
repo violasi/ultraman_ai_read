@@ -9,7 +9,7 @@ interface RubyTextProps {
 const PUNCTUATION = /[。，！？：；、""''（）—…～·《》\s]/
 
 export default function RubyText({ char, pinyin, isKnown, highlight, onClick }: RubyTextProps) {
-  const highlightClass = highlight ? 'text-[#E8453C] font-black underline decoration-[#E8453C] decoration-2 underline-offset-4' : ''
+  const highlightClass = highlight ? 'text-[var(--color-primary)] font-black underline decoration-[var(--color-primary)] decoration-2 underline-offset-4' : ''
 
   if (!pinyin || PUNCTUATION.test(char)) {
     return (
@@ -25,7 +25,7 @@ export default function RubyText({ char, pinyin, isKnown, highlight, onClick }: 
   if (isKnown) {
     return (
       <span
-        className={`text-4xl md:text-5xl cursor-pointer select-none text-gray-800 hover:text-[#E8453C] transition-colors active:scale-110 ${highlightClass}`}
+        className={`text-4xl md:text-5xl cursor-pointer select-none text-gray-800 hover:text-[var(--color-primary)] transition-colors active:scale-110 ${highlightClass}`}
         onClick={onClick}
       >
         {char}
@@ -35,7 +35,7 @@ export default function RubyText({ char, pinyin, isKnown, highlight, onClick }: 
 
   return (
     <ruby
-      className={`text-4xl md:text-5xl cursor-pointer select-none hover:bg-[#E8453C]/5 rounded px-0.5 transition-colors active:scale-110 ${highlightClass}`}
+      className={`text-4xl md:text-5xl cursor-pointer select-none hover:bg-[var(--color-primary)]/5 rounded px-0.5 transition-colors active:scale-110 ${highlightClass}`}
       onClick={onClick}
     >
       {char}

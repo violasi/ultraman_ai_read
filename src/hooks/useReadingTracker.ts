@@ -8,10 +8,12 @@ const PUNCTUATION_RE = /[。，！？：；、""''（）—…～·《》\s]/
 export interface ReadingResult {
   newlyLearned: string[]
   forgotten: string[]
+  needsPractice: string[]
+  graduatedFromVocab: string[]
 }
 
 export function useReadingTracker() {
-  const { isKnownChar, addKnownChars, removeKnownChar, addVocabChar } = useApp()
+  const { isKnownChar, addKnownChars, removeKnownChar, addVocabChar, vocab, removeVocabChar } = useApp()
   const { speakChinese } = useTTS()
   const clickedCharsRef = useRef<Set<string>>(new Set())
 
@@ -40,11 +42,20 @@ export function useReadingTracker() {
     }
 
     // Unknown chars NOT clicked → learned
+    // If char was in vocab (生字本), remove it — not clicking means it's mastered now
+    const vocabChars = new Set(vocab.map(v => v.char))
     const newlyLearned: string[] = []
+    const graduatedFromVocab: string[] = []
     for (const char of allChars) {
       if (!isKnownChar(char) && !clicked.has(char)) {
         newlyLearned.push(char)
+        if (vocabChars.has(char)) {
+          graduatedFromVocab.push(char)
+        }
       }
+    }
+    for (const char of graduatedFromVocab) {
+      removeVocabChar(char)
     }
     if (newlyLearned.length > 0) {
       addKnownChars(newlyLearned)
@@ -54,12 +65,15 @@ export function useReadingTracker() {
     // - Known chars that were clicked → "forgotten", remove from known
     // - Unknown chars that were clicked → also need practice, add to vocab
     const forgotten: string[] = []
+    const needsPractice: string[] = []
     for (const char of clicked) {
       if (!allChars.has(char)) continue // skip chars not in this story
       const wasKnown = isKnownChar(char)
       if (wasKnown) {
         forgotten.push(char)
         removeKnownChar(char)
+      } else {
+        needsPractice.push(char)
       }
       // Add to vocab regardless (known or unknown, if clicked = needs practice)
       for (const sentence of sentences) {
@@ -71,8 +85,8 @@ export function useReadingTracker() {
       }
     }
 
-    return { newlyLearned, forgotten }
-  }, [isKnownChar, addKnownChars, removeKnownChar, addVocabChar])
+    return { newlyLearned, forgotten, needsPractice, graduatedFromVocab }
+  }, [isKnownChar, addKnownChars, removeKnownChar, addVocabChar, removeVocabChar, vocab])
 
   const resetTracker = useCallback(() => {
     clickedCharsRef.current = new Set()

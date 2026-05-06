@@ -3,7 +3,7 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
 import { useReadingTracker, type ReadingResult } from '../hooks/useReadingTracker'
 import { loadBook } from '../lib/books'
-import { getCharacterById } from '../data/ultramanCharacters'
+import { getCharacterById } from '../config/theme'
 import { useTTS } from '../hooks/useTTS'
 import RubyText from '../components/shared/RubyText'
 import UltramanAvatar from '../components/shared/UltramanAvatar'
@@ -51,7 +51,7 @@ export default function BookReadPage() {
       <div className="text-center py-20">
         <span className="text-4xl block mb-3">😕</span>
         <p className="text-gray-500">找不到这本绘本</p>
-        <button onClick={() => navigate('/books')} className="mt-4 text-[#E8453C] font-bold">
+        <button onClick={() => navigate('/books')} className="mt-4 text-[var(--color-primary)] font-bold">
           返回绘本列表
         </button>
       </div>
@@ -129,40 +129,61 @@ export default function BookReadPage() {
       <div className="space-y-6 py-8">
         <div className="text-center space-y-4">
           <UltramanAvatar character={hero} size="lg" />
-          <div className="bg-[#FFF8F0] rounded-2xl p-5 border border-[#E8DED5] space-y-3">
+          <div className="bg-[var(--color-bg-warm)] rounded-2xl p-5 border border-[var(--color-border)] space-y-3">
             <p className="text-xl font-black text-gray-800">
               这是你给{hero.shortName}读的第{readCount}个故事
             </p>
-            <p className="text-lg text-[#E8453C] font-bold">
+            <p className="text-lg text-[var(--color-primary)] font-bold">
               {hero.shortName}说：很喜欢这个故事！
             </p>
             <p className="text-sm text-gray-400">《{book.title}》</p>
           </div>
         </div>
 
-        {readingSummary && (readingSummary.newlyLearned.length > 0 || readingSummary.forgotten.length > 0) && (
-          <div className="bg-white border-2 border-yellow-300 rounded-2xl p-4 space-y-3">
-            <h3 className="text-base font-bold text-gray-800 text-center">📊 阅读小结</h3>
-            {readingSummary.newlyLearned.length > 0 && (
-              <div className="bg-[#E8453C]/10 rounded-xl p-3">
-                <p className="text-sm font-bold text-[#E8453C] mb-1">
-                  🎉 新学会 {readingSummary.newlyLearned.length} 个字！
+        {readingSummary && (readingSummary.newlyLearned.length > 0 || readingSummary.forgotten.length > 0 || readingSummary.needsPractice.length > 0 || readingSummary.graduatedFromVocab.length > 0) && (
+          <div className="bg-white border-2 border-yellow-300 rounded-2xl p-5 space-y-4">
+            {readingSummary.graduatedFromVocab.length > 0 && (
+              <div className="bg-green-50 rounded-xl p-4">
+                <p className="text-lg font-black text-green-700 mb-2">
+                  🎓 {hero.shortName}说：太厉害了！{readingSummary.graduatedFromVocab.length}个生字全学会了！
                 </p>
-                <p className="text-xl tracking-wider text-[#E8453C]">
+                <p className="text-3xl tracking-widest text-green-800 text-center py-1">
+                  {readingSummary.graduatedFromVocab.join(' ')}
+                </p>
+                <p className="text-sm text-green-600 mt-2">已从生字本毕业</p>
+              </div>
+            )}
+            {readingSummary.newlyLearned.length > 0 && (
+              <div className="bg-[var(--color-primary)]/10 rounded-xl p-4">
+                <p className="text-lg font-black text-[var(--color-primary)] mb-2">
+                  🎉 {hero.shortName}说：你一下子认识了{readingSummary.newlyLearned.length}个新字！
+                </p>
+                <p className="text-3xl tracking-widest text-[var(--color-primary)] text-center py-1">
                   {readingSummary.newlyLearned.join(' ')}
                 </p>
-                <p className="text-xs text-[#E8453C]/60 mt-1">（整篇没有点击发音 = 你已经认识了）</p>
+                <p className="text-sm text-[var(--color-primary)]/60 mt-2">没有点发音就是认识了</p>
+              </div>
+            )}
+            {readingSummary.needsPractice.length > 0 && (
+              <div className="bg-red-50 rounded-xl p-4">
+                <p className="text-lg font-black text-red-700 mb-2">
+                  🆕 {hero.shortName}说：这{readingSummary.needsPractice.length}个字我们一起多练练！
+                </p>
+                <p className="text-3xl tracking-widest text-red-800 text-center py-1">
+                  {readingSummary.needsPractice.join(' ')}
+                </p>
+                <p className="text-sm text-red-600 mt-2">已加入生字本</p>
               </div>
             )}
             {readingSummary.forgotten.length > 0 && (
-              <div className="bg-orange-50 rounded-xl p-3">
-                <p className="text-sm font-bold text-orange-700 mb-1">
-                  📝 需要复习 {readingSummary.forgotten.length} 个字
+              <div className="bg-orange-50 rounded-xl p-4">
+                <p className="text-lg font-black text-orange-700 mb-2">
+                  📝 {hero.shortName}说：这{readingSummary.forgotten.length}个字有点忘了，再复习一下吧！
                 </p>
-                <p className="text-xl tracking-wider text-orange-800">
+                <p className="text-3xl tracking-widest text-orange-800 text-center py-1">
                   {readingSummary.forgotten.join(' ')}
                 </p>
-                <p className="text-xs text-orange-600 mt-1">（点了发音 = 还不太熟，移入生字本）</p>
+                <p className="text-sm text-orange-600 mt-2">移入生字本复习</p>
               </div>
             )}
           </div>
@@ -170,7 +191,7 @@ export default function BookReadPage() {
 
         <button
           onClick={() => navigate('/books')}
-          className="w-full py-4 rounded-2xl font-black text-lg bg-[#FFD93D] text-gray-800 active:scale-[0.97] transition-all shadow-[0_3px_0_#c9a820]"
+          className="w-full py-4 rounded-2xl font-black text-lg bg-[var(--color-secondary)] text-gray-800 active:scale-[0.97] transition-all shadow-[0_3px_0_var(--color-secondary-dark)]"
         >
           完成阅读 ✨
         </button>
@@ -188,9 +209,9 @@ export default function BookReadPage() {
       </div>
 
       {/* Progress bar */}
-      <div className="h-1.5 bg-[#E8DED5] rounded-full overflow-hidden mb-2">
+      <div className="h-1.5 bg-[var(--color-border)] rounded-full overflow-hidden mb-2">
         <div
-          className="h-full bg-[#E8453C] rounded-full transition-all duration-300"
+          className="h-full bg-[var(--color-primary)] rounded-full transition-all duration-300"
           style={{ width: `${((currentPage + 1) / totalPages) * 100}%` }}
         />
       </div>
@@ -198,7 +219,7 @@ export default function BookReadPage() {
       {/* Main content: image left 2/3, text right 1/3 */}
       <div className="flex gap-3 flex-1 min-h-0">
         {/* Left: page image - 2/3 width */}
-        <div className="w-2/3 flex-shrink-0 rounded-2xl overflow-hidden border border-[#E8DED5] bg-white flex items-center">
+        <div className="w-2/3 flex-shrink-0 rounded-2xl overflow-hidden border border-[var(--color-border)] bg-white flex items-center">
           <BookImage
             src={page.imagePath}
             alt={`第${currentPage + 1}页`}
@@ -210,14 +231,14 @@ export default function BookReadPage() {
         <div className="w-1/3 flex flex-col gap-2 min-h-0 justify-center">
           {/* Ultraman avatar - prominent */}
           <div className="flex-shrink-0 flex justify-center py-2">
-            <div className="bg-white rounded-full p-1.5 shadow-lg border-2 border-[#E8DED5]">
+            <div className="bg-white rounded-full p-1.5 shadow-lg border-2 border-[var(--color-border)]">
               <UltramanAvatar character={hero} size="lg" />
             </div>
           </div>
 
           {/* Text area */}
           {page.sentences.length > 0 && (
-            <div className="bg-[#FFF8F0] rounded-2xl p-3 border border-[#E8DED5] space-y-2 max-h-[60%] overflow-y-auto">
+            <div className="bg-[var(--color-bg-warm)] rounded-2xl p-3 border border-[var(--color-border)] space-y-2 max-h-[60%] overflow-y-auto">
               {page.sentences.map((sentence, sIdx) => (
                 <div key={sIdx} className="flex flex-wrap gap-0.5 justify-center">
                   {sentence.words.map((word, wIdx) => (
@@ -238,7 +259,7 @@ export default function BookReadPage() {
           {page.sentences.length > 0 && (
             <button
               onClick={speakPage}
-              className="flex-shrink-0 py-1.5 text-center text-[#E8453C] font-bold text-sm hover:bg-[#E8453C]/10 rounded-xl transition-colors"
+              className="flex-shrink-0 py-1.5 text-center text-[var(--color-primary)] font-bold text-sm hover:bg-[var(--color-primary)]/10 rounded-xl transition-colors"
             >
               🔊 听整页
             </button>
@@ -261,21 +282,21 @@ export default function BookReadPage() {
         <button
           onClick={goPrev}
           disabled={currentPage === 0}
-          className="flex-1 py-3 rounded-2xl font-bold text-base border-2 border-[#E8DED5] text-gray-600 hover:bg-[#F0E6DD] disabled:opacity-30 disabled:cursor-not-allowed active:scale-[0.97] transition-all"
+          className="flex-1 py-3 rounded-2xl font-bold text-base border-2 border-[var(--color-border)] text-gray-600 hover:bg-[var(--color-bg-hover)] disabled:opacity-30 disabled:cursor-not-allowed active:scale-[0.97] transition-all"
         >
           ← 上一页
         </button>
         {currentPage < totalPages - 1 ? (
           <button
             onClick={goNext}
-            className="flex-1 py-3 rounded-2xl font-black text-base bg-[#E8453C] text-white active:scale-[0.97] transition-all shadow-[0_3px_0_#c13a33]"
+            className="flex-1 py-3 rounded-2xl font-black text-base bg-[var(--color-primary)] text-white active:scale-[0.97] transition-all shadow-[0_3px_0_var(--color-primary-dark)]"
           >
             下一页 →
           </button>
         ) : (
           <button
             onClick={finishReading}
-            className="flex-1 py-3 rounded-2xl font-black text-base bg-[#FFD93D] text-gray-800 active:scale-[0.97] transition-all shadow-[0_3px_0_#c9a820]"
+            className="flex-1 py-3 rounded-2xl font-black text-base bg-[var(--color-secondary)] text-gray-800 active:scale-[0.97] transition-all shadow-[0_3px_0_var(--color-secondary-dark)]"
           >
             读完了 ✨
           </button>

@@ -51,7 +51,7 @@ export async function deleteBook(bookId: string): Promise<void> {
 }
 
 export function computeKnownRatio(meta: PictureBookMeta, knownChars: Set<string>): number {
-  if (meta.uniqueChars.length === 0) return 1
+  if (!meta.uniqueChars || meta.uniqueChars.length === 0) return 1
   const known = meta.uniqueChars.filter(c => knownChars.has(c)).length
   return known / meta.uniqueChars.length
 }
@@ -69,18 +69,20 @@ export function recommendBook(
     readRecords.filter(r => r.heroId === heroId).map(r => r.bookId)
   )
 
-  const TARGET = 0.8
-  const sortByCloseness = (list: PictureBookMeta[]) =>
-    [...list].sort((a, b) =>
-      Math.abs(computeKnownRatio(a, knownChars) - TARGET) -
-      Math.abs(computeKnownRatio(b, knownChars) - TARGET)
-    )
+  const TARGET = 0.97
 
-  // New (unread) books first, sorted by closeness to 80%
-  // then old (read) books, also sorted by closeness to 80%
-  const unread = sortByCloseness(catalog.filter(b => !readBookIds.has(b.id)))
-  const read = sortByCloseness(catalog.filter(b => readBookIds.has(b.id)))
-  const ordered = [...unread, ...read]
+  // Skip fully-mastered books (ratio === 1): nothing to learn there.
+  // Primary sort: closeness to 97% known-char ratio.
+  // Tiebreaker: unread books before read ones at the same ratio.
+  const candidates = catalog.filter(b => computeKnownRatio(b, knownChars) < 1)
+  const ordered = candidates.sort((a, b) => {
+    const distA = Math.abs(computeKnownRatio(a, knownChars) - TARGET)
+    const distB = Math.abs(computeKnownRatio(b, knownChars) - TARGET)
+    if (distA !== distB) return distA - distB
+    const aRead = readBookIds.has(a.id) ? 1 : 0
+    const bRead = readBookIds.has(b.id) ? 1 : 0
+    return aRead - bRead
+  })
 
   if (ordered.length === 0) return null
 

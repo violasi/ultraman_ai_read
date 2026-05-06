@@ -2,13 +2,11 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
   saveUserBook,
-  listUserBooks,
   deleteUserBook,
   getAllBookImages,
-  getUserBook,
   makeIdbPath,
 } from '../lib/bookStorage'
-import { clearCatalogCache } from '../lib/books'
+import { loadCatalog, loadBook, clearCatalogCache } from '../lib/books'
 import { AI_PROMPT_TEMPLATE } from '../lib/aiPromptTemplate'
 import { validateBookJson } from '../lib/bookValidation'
 import type { PictureBookMeta, PictureBook } from '../types/picturebook'
@@ -40,8 +38,9 @@ export default function BookManagePage() {
 
   const refreshBooks = useCallback(async () => {
     try {
-      const books = await listUserBooks()
-      setUserBooks(books)
+      clearCatalogCache()
+      const all = await loadCatalog()
+      setUserBooks(all)
     } catch { /* ignore */ }
     setLoading(false)
   }, [])
@@ -121,22 +120,49 @@ export default function BookManagePage() {
 
   // --- Export single book ---
 
-  const handleExport = async (meta: PictureBookMeta) => {
-    const book = await getUserBook(meta.id)
-    if (!book) return
+  const exportBookData = async (meta: PictureBookMeta): Promise<{ book: PictureBook; images: Record<number, string> } | null> => {
+    const book = await loadBook(meta.id)
+    if (!book) return null
 
-    const bookImages = await getAllBookImages(meta.id)
     const imagesBase64: Record<number, string> = {}
-    for (const img of bookImages) {
-      const reader = new FileReader()
-      const b64 = await new Promise<string>((resolve) => {
-        reader.onload = () => resolve(reader.result as string)
-        reader.readAsDataURL(img.blob)
-      })
-      imagesBase64[img.pageIndex] = b64
+
+    // Try IndexedDB images first
+    const idbImages = await getAllBookImages(meta.id)
+    if (idbImages.length > 0) {
+      for (const img of idbImages) {
+        const reader = new FileReader()
+        const b64 = await new Promise<string>((resolve) => {
+          reader.onload = () => resolve(reader.result as string)
+          reader.readAsDataURL(img.blob)
+        })
+        imagesBase64[img.pageIndex] = b64
+      }
+    } else {
+      // Fetch static images from /books/{id}/pages/
+      for (let i = 0; i < meta.pageCount; i++) {
+        try {
+          const pageNum = String(i + 1).padStart(2, '0')
+          const res = await fetch(`/books/${meta.id}/pages/page-${pageNum}.jpg`)
+          if (!res.ok) continue
+          const blob = await res.blob()
+          const reader = new FileReader()
+          const b64 = await new Promise<string>((resolve) => {
+            reader.onload = () => resolve(reader.result as string)
+            reader.readAsDataURL(blob)
+          })
+          imagesBase64[i] = b64
+        } catch { /* skip */ }
+      }
     }
 
-    const exportData = { version: 1, book, images: imagesBase64 }
+    return { book, images: imagesBase64 }
+  }
+
+  const handleExport = async (meta: PictureBookMeta) => {
+    const data = await exportBookData(meta)
+    if (!data) return
+
+    const exportData = { version: 1, ...data }
     const blob = new Blob([JSON.stringify(exportData)], { type: 'application/json' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
@@ -146,50 +172,118 @@ export default function BookManagePage() {
     URL.revokeObjectURL(url)
   }
 
-  // --- Export all ---
+  // --- Export series ---
+
+  const getSeriesList = () => {
+    const seriesMap = new Map<string, PictureBookMeta[]>()
+    for (const book of userBooks) {
+      const s = book.series || '未分类'
+      const list = seriesMap.get(s) || []
+      list.push(book)
+      seriesMap.set(s, list)
+    }
+    return seriesMap
+  }
+
+  const handleExportSeries = async (seriesName: string, books: PictureBookMeta[]) => {
+    const allBooks = []
+    for (const meta of books) {
+      const data = await exportBookData(meta)
+      if (data) allBooks.push(data)
+    }
+
+    const exportData = { version: 2, type: 'series', series: seriesName, books: allBooks }
+    const blob = new Blob([JSON.stringify(exportData)], { type: 'application/json' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `绘本系列-${seriesName}-${books.length}本.json`
+    a.click()
+    URL.revokeObjectURL(url)
+  }
 
   const handleExportAll = async () => {
-    for (const book of userBooks) {
-      await handleExport(book)
+    const seriesMap = getSeriesList()
+    for (const [seriesName, books] of seriesMap) {
+      await handleExportSeries(seriesName, books)
     }
   }
 
   // --- Import ---
 
-  const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
+  const importOneBook = async (bookData: { book: PictureBook; images: Record<string, string> }) => {
+    const imageBlobs = await Promise.all(
+      Object.entries(bookData.images).map(async ([pageIdx, b64]) => {
+        const res = await fetch(b64 as string)
+        const blob = await res.blob()
+        return { pageIndex: parseInt(pageIdx), blob }
+      }),
+    )
 
-    const reader = new FileReader()
-    reader.onload = async () => {
-      try {
-        const data = JSON.parse(reader.result as string)
-        if (!data.book || !data.images) {
-          setImportMsg('文件格式不正确')
-          return
+    // Rewrite image paths to idb:// so BookImage can resolve them from IndexedDB
+    // The export stores images keyed by 0-based index (matching page-01.jpg, page-02.jpg, etc.)
+    // But book pages may reference non-sequential images (e.g., pageIndex 0 → page-04.jpg)
+    // So we must extract the original image number from imagePath to find the correct idb key
+    const book = { ...bookData.book }
+    const extractImageIndex = (imagePath: string): number => {
+      const m = imagePath.match(/page-(\d+)\./)
+      return m ? parseInt(m[1], 10) - 1 : 0  // page-01.jpg → index 0
+    }
+    book.pages = book.pages.map(p => ({
+      ...p,
+      imagePath: makeIdbPath(book.id, extractImageIndex(p.imagePath)),
+    }))
+    book.coverImage = book.pages[0]?.imagePath || makeIdbPath(book.id, 0)
+
+    await saveUserBook(book, imageBlobs)
+  }
+
+  const importOneFile = async (file: File): Promise<string> => {
+    const text = await file.text()
+    const data = JSON.parse(text)
+
+    // v2: series bundle (multiple books)
+    if (data.version === 2 && data.type === 'series' && Array.isArray(data.books)) {
+      let count = 0
+      for (const bookData of data.books) {
+        if (bookData.book && bookData.images) {
+          await importOneBook(bookData)
+          count++
         }
+      }
+      return `${data.series}（${count}本）`
+    }
 
-        const book: PictureBook = data.book
-        const imagesMap: Record<string, string> = data.images
+    // v1: single book
+    if (!data.book || !data.images) throw new Error('格式错误')
+    await importOneBook(data)
+    return `《${data.book.title}》`
+  }
 
-        // Convert base64 back to blobs
-        const imageBlobs = await Promise.all(
-          Object.entries(imagesMap).map(async ([pageIdx, b64]) => {
-            const res = await fetch(b64 as string)
-            const blob = await res.blob()
-            return { pageIndex: parseInt(pageIdx), blob }
-          }),
-        )
+  const handleImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files
+    if (!files || files.length === 0) return
 
-        await saveUserBook(book, imageBlobs)
-        clearCatalogCache()
-        setImportMsg(`导入成功：《${book.title}》`)
-        refreshBooks()
+    const results: string[] = []
+    const errors: string[] = []
+
+    for (const file of Array.from(files)) {
+      try {
+        const msg = await importOneFile(file)
+        results.push(msg)
       } catch {
-        setImportMsg('导入失败，请检查文件格式')
+        errors.push(file.name)
       }
     }
-    reader.readAsText(file)
+
+    clearCatalogCache()
+    refreshBooks()
+
+    const parts = []
+    if (results.length) parts.push(`导入成功：${results.join('、')}`)
+    if (errors.length) parts.push(`导入失败：${errors.join('、')}`)
+    setImportMsg(parts.join('；'))
+
     e.target.value = ''
   }
 
@@ -235,13 +329,13 @@ export default function BookManagePage() {
         <div className="flex gap-2">
           <button
             onClick={() => setStep('info')}
-            className="flex-1 py-3 rounded-2xl bg-[#E8453C] text-white font-black text-base active:scale-[0.97] transition-all"
+            className="flex-1 py-3 rounded-2xl bg-[var(--color-primary)] text-white font-black text-base active:scale-[0.97] transition-all"
           >
             + 添加绘本
           </button>
           <button
             onClick={() => importRef.current?.click()}
-            className="px-4 py-3 rounded-2xl border-2 border-[#E8DED5] text-gray-600 font-bold text-sm active:scale-[0.97] transition-all"
+            className="px-4 py-3 rounded-2xl border-2 border-[var(--color-border)] text-gray-600 font-bold text-sm active:scale-[0.97] transition-all"
           >
             导入
           </button>
@@ -249,6 +343,7 @@ export default function BookManagePage() {
             ref={importRef}
             type="file"
             accept=".json"
+            multiple
             className="hidden"
             onChange={handleImport}
           />
@@ -274,33 +369,48 @@ export default function BookManagePage() {
             <div className="flex justify-end">
               <button
                 onClick={handleExportAll}
-                className="text-xs text-[#E8453C] font-bold"
+                className="text-xs text-[var(--color-primary)] font-bold px-3 py-2"
               >
-                全部导出
+                全部导出（按系列）
               </button>
             </div>
-            <div className="space-y-2">
-              {userBooks.map(book => (
-                <div
-                  key={book.id}
-                  className="bg-[#FFF8F0] rounded-2xl p-3 border border-[#E8DED5] flex items-center gap-3"
-                >
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-bold text-gray-800 truncate">{book.title}</p>
-                    <p className="text-xs text-gray-400">{book.series} · {book.pageCount}页 · {book.uniqueChars.length}字</p>
+            <div className="space-y-4">
+              {[...getSeriesList()].map(([seriesName, books]) => (
+                <div key={seriesName}>
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="text-sm font-black text-gray-700">{seriesName}（{books.length}本）</h3>
+                    <button
+                      onClick={() => handleExportSeries(seriesName, books)}
+                      className="text-xs text-[var(--color-primary)] font-bold"
+                    >
+                      导出此系列
+                    </button>
                   </div>
-                  <button
-                    onClick={() => handleExport(book)}
-                    className="text-xs text-blue-500 font-bold px-2 py-1"
-                  >
-                    导出
-                  </button>
-                  <button
-                    onClick={() => handleDelete(book.id)}
-                    className="text-xs text-red-400 font-bold px-2 py-1"
-                  >
-                    删除
-                  </button>
+                  <div className="space-y-1.5">
+                    {books.map(book => (
+                      <div
+                        key={book.id}
+                        className="bg-[var(--color-bg-warm)] rounded-2xl p-3 border border-[var(--color-border)] flex items-center gap-3"
+                      >
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-bold text-gray-800 truncate">{book.title}</p>
+                          <p className="text-xs text-gray-400">{book.pageCount}页 · {book.uniqueChars.length}字</p>
+                        </div>
+                        <button
+                          onClick={() => handleExport(book)}
+                          className="text-xs text-blue-500 font-bold px-2 py-1"
+                        >
+                          导出
+                        </button>
+                        <button
+                          onClick={() => handleDelete(book.id)}
+                          className="text-xs text-red-400 font-bold px-2 py-1"
+                        >
+                          删除
+                        </button>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               ))}
             </div>
@@ -326,7 +436,7 @@ export default function BookManagePage() {
               value={title}
               onChange={e => setTitle(e.target.value)}
               placeholder="例：小猫喝水"
-              className="w-full p-3 rounded-xl border border-[#E8DED5] bg-white text-sm focus:border-[#E8453C] focus:outline-none"
+              className="w-full p-3 rounded-xl border border-[var(--color-border)] bg-white text-sm focus:border-[var(--color-primary)] focus:outline-none"
             />
           </div>
           <div className="flex gap-3">
@@ -336,7 +446,7 @@ export default function BookManagePage() {
                 value={series}
                 onChange={e => setSeries(e.target.value)}
                 placeholder="例：摩比汉语分级"
-                className="w-full p-3 rounded-xl border border-[#E8DED5] bg-white text-sm focus:border-[#E8453C] focus:outline-none"
+                className="w-full p-3 rounded-xl border border-[var(--color-border)] bg-white text-sm focus:border-[var(--color-primary)] focus:outline-none"
               />
             </div>
             <div className="flex-1">
@@ -345,7 +455,7 @@ export default function BookManagePage() {
                 value={level}
                 onChange={e => setLevel(e.target.value)}
                 placeholder="例：萌芽"
-                className="w-full p-3 rounded-xl border border-[#E8DED5] bg-white text-sm focus:border-[#E8453C] focus:outline-none"
+                className="w-full p-3 rounded-xl border border-[var(--color-border)] bg-white text-sm focus:border-[var(--color-primary)] focus:outline-none"
               />
             </div>
           </div>
@@ -356,7 +466,7 @@ export default function BookManagePage() {
           <label className="text-sm font-bold text-gray-600 block mb-2">页面照片 *</label>
           <div className="flex flex-wrap gap-2">
             {images.map((img, i) => (
-              <div key={i} className="relative w-20 h-24 rounded-xl overflow-hidden border border-[#E8DED5]">
+              <div key={i} className="relative w-20 h-24 rounded-xl overflow-hidden border border-[var(--color-border)]">
                 <img src={img.preview} className="w-full h-full object-cover" />
                 <button
                   onClick={() => removeImage(i)}
@@ -371,7 +481,7 @@ export default function BookManagePage() {
             ))}
             <button
               onClick={() => fileInputRef.current?.click()}
-              className="w-20 h-24 rounded-xl border-2 border-dashed border-[#E8DED5] flex flex-col items-center justify-center text-gray-400 hover:border-[#E8453C] hover:text-[#E8453C] transition-colors"
+              className="w-20 h-24 rounded-xl border-2 border-dashed border-[var(--color-border)] flex flex-col items-center justify-center text-gray-400 hover:border-[var(--color-primary)] hover:text-[var(--color-primary)] transition-colors"
             >
               <span className="text-2xl">+</span>
               <span className="text-[10px]">添加</span>
@@ -390,7 +500,7 @@ export default function BookManagePage() {
         <button
           onClick={() => setStep('ai')}
           disabled={!title.trim() || images.length === 0}
-          className="w-full py-3 rounded-2xl font-black text-base bg-[#E8453C] text-white active:scale-[0.97] transition-all disabled:opacity-40"
+          className="w-full py-3 rounded-2xl font-black text-base bg-[var(--color-primary)] text-white active:scale-[0.97] transition-all disabled:opacity-40"
         >
           下一步 →
         </button>
@@ -425,12 +535,12 @@ export default function BookManagePage() {
             <label className="text-sm font-bold text-gray-600">提示词</label>
             <button
               onClick={handleCopyPrompt}
-              className="text-xs font-bold text-[#E8453C]"
+              className="text-xs font-bold text-[var(--color-primary)]"
             >
               {copied ? '已复制 ✓' : '复制'}
             </button>
           </div>
-          <div className="bg-gray-50 rounded-xl p-3 border border-[#E8DED5] max-h-32 overflow-y-auto">
+          <div className="bg-gray-50 rounded-xl p-3 border border-[var(--color-border)] max-h-32 overflow-y-auto">
             <pre className="text-[11px] text-gray-600 whitespace-pre-wrap">{AI_PROMPT_TEMPLATE}</pre>
           </div>
         </div>
@@ -443,7 +553,7 @@ export default function BookManagePage() {
             onChange={e => { setJsonInput(e.target.value); setValidationMsg(null) }}
             placeholder='{"pages": [...]}'
             rows={8}
-            className="w-full p-3 rounded-xl border border-[#E8DED5] bg-white text-xs font-mono focus:border-[#E8453C] focus:outline-none resize-none"
+            className="w-full p-3 rounded-xl border border-[var(--color-border)] bg-white text-xs font-mono focus:border-[var(--color-primary)] focus:outline-none resize-none"
           />
         </div>
 
@@ -456,7 +566,7 @@ export default function BookManagePage() {
         <div className="flex gap-2">
           <button
             onClick={() => setStep('info')}
-            className="flex-1 py-3 rounded-2xl border-2 border-[#E8DED5] text-gray-600 font-bold active:scale-[0.97] transition-all"
+            className="flex-1 py-3 rounded-2xl border-2 border-[var(--color-border)] text-gray-600 font-bold active:scale-[0.97] transition-all"
           >
             ← 上一步
           </button>
@@ -488,7 +598,7 @@ export default function BookManagePage() {
               }
             }}
             disabled={!jsonInput.trim()}
-            className="flex-1 py-3 rounded-2xl bg-[#E8453C] text-white font-black active:scale-[0.97] transition-all disabled:opacity-40"
+            className="flex-1 py-3 rounded-2xl bg-[var(--color-primary)] text-white font-black active:scale-[0.97] transition-all disabled:opacity-40"
           >
             验证并预览
           </button>
@@ -507,10 +617,10 @@ export default function BookManagePage() {
         </div>
 
         {validatedBook && (
-          <div className="bg-[#FFF8F0] rounded-2xl p-5 border border-[#E8DED5] space-y-4">
+          <div className="bg-[var(--color-bg-warm)] rounded-2xl p-5 border border-[var(--color-border)] space-y-4">
             {/* Cover preview */}
             {images[0] && (
-              <div className="w-32 h-40 mx-auto rounded-xl overflow-hidden border border-[#E8DED5]">
+              <div className="w-32 h-40 mx-auto rounded-xl overflow-hidden border border-[var(--color-border)]">
                 <img src={images[0].preview} className="w-full h-full object-cover" />
               </div>
             )}
@@ -524,7 +634,7 @@ export default function BookManagePage() {
 
             <div className="grid grid-cols-3 gap-3">
               <div className="text-center">
-                <span className="text-2xl font-black text-[#E8453C]">{validatedBook.pageCount}</span>
+                <span className="text-2xl font-black text-[var(--color-primary)]">{validatedBook.pageCount}</span>
                 <p className="text-xs text-gray-400">页</p>
               </div>
               <div className="text-center">
@@ -544,13 +654,13 @@ export default function BookManagePage() {
         <div className="flex gap-2">
           <button
             onClick={() => setStep('ai')}
-            className="flex-1 py-3 rounded-2xl border-2 border-[#E8DED5] text-gray-600 font-bold active:scale-[0.97] transition-all"
+            className="flex-1 py-3 rounded-2xl border-2 border-[var(--color-border)] text-gray-600 font-bold active:scale-[0.97] transition-all"
           >
             ← 返回修改
           </button>
           <button
             onClick={handleSave}
-            className="flex-1 py-3 rounded-2xl bg-[#FFD93D] text-gray-800 font-black active:scale-[0.97] transition-all shadow-[0_3px_0_#c9a820]"
+            className="flex-1 py-3 rounded-2xl bg-[var(--color-secondary)] text-gray-800 font-black active:scale-[0.97] transition-all shadow-[0_3px_0_var(--color-secondary-dark)]"
           >
             保存绘本 ✨
           </button>

@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
 import { loadCatalog, computeKnownRatio } from '../lib/books'
-import { ULTRAMAN_CHARACTERS } from '../data/ultramanCharacters'
+import { CHARACTERS } from '../config/theme'
 import UltramanAvatar from '../components/shared/UltramanAvatar'
 import BookImage from '../components/shared/BookImage'
 import type { PictureBookMeta } from '../types/picturebook'
@@ -67,7 +67,7 @@ export default function BookLibraryPage() {
         <p className="text-gray-400 text-sm">上传你自己的绘本开始阅读吧</p>
         <button
           onClick={() => navigate('/books/manage')}
-          className="mt-2 px-6 py-2 rounded-xl bg-[#E8453C] text-white font-bold text-sm active:scale-[0.97] transition-all"
+          className="mt-2 px-6 py-2 rounded-xl bg-[var(--color-primary)] text-white font-bold text-sm active:scale-[0.97] transition-all"
         >
           + 添加绘本
         </button>
@@ -86,7 +86,7 @@ export default function BookLibraryPage() {
           </div>
           <button
             onClick={() => navigate('/books/manage')}
-            className="px-3 py-1.5 rounded-xl bg-[#E8453C] text-white text-xs font-bold active:scale-[0.97] transition-all"
+            className="px-3 py-1.5 rounded-xl bg-[var(--color-primary)] text-white text-xs font-bold active:scale-[0.97] transition-all"
           >
             + 添加
           </button>
@@ -100,8 +100,8 @@ export default function BookLibraryPage() {
               onClick={() => setSortMode(mode)}
               className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all ${
                 sortMode === mode
-                  ? 'bg-[#E8453C] text-white'
-                  : 'bg-[#E8DED5] text-gray-600'
+                  ? 'bg-[var(--color-primary)] text-white'
+                  : 'bg-[var(--color-border)] text-gray-600'
               }`}
             >
               {label}
@@ -121,7 +121,7 @@ export default function BookLibraryPage() {
               <button
                 key={book.id}
                 onClick={() => setSelectedBook(book)}
-                className="text-left bg-white rounded-xl border border-[#E8DED5] overflow-hidden active:scale-[0.95] transition-all"
+                className="text-left bg-white rounded-xl border border-[var(--color-border)] overflow-hidden active:scale-[0.95] transition-all"
               >
                 {/* Cover with hero avatar overlay */}
                 <div className="relative aspect-[3/4] bg-white overflow-hidden">
@@ -134,14 +134,14 @@ export default function BookLibraryPage() {
                   {heroIds.length > 0 && (
                     <div className="absolute bottom-0 right-0 flex -space-x-1.5 p-0.5">
                       {heroIds.slice(0, 3).map(hid => {
-                        const hero = ULTRAMAN_CHARACTERS.find(c => c.id === hid)
+                        const hero = CHARACTERS.find(c => c.id === hid)
                         if (!hero) return null
                         return (
                           <img
                             key={hid}
                             src={hero.imageUrl}
                             alt={hero.shortName}
-                            className="w-5 h-5 rounded-full border border-white object-cover"
+                            className="w-10 h-10 rounded-full border border-white object-cover"
                           />
                         )
                       })}
@@ -177,10 +177,10 @@ export default function BookLibraryPage() {
         >
           <div className="absolute inset-0 bg-black/40" />
           <div
-            className="relative w-full max-w-lg mx-auto bg-[#FFF8F0] rounded-t-3xl p-6 space-y-5 pb-[calc(1.5rem+env(safe-area-inset-bottom))]"
+            className="relative w-full max-w-lg mx-auto bg-[var(--color-bg-warm)] rounded-t-3xl p-6 space-y-5 pb-[calc(1.5rem+env(safe-area-inset-bottom))]"
             onClick={e => e.stopPropagation()}
           >
-            <div className="w-10 h-1 bg-[#E8DED5] rounded-full mx-auto" />
+            <div className="w-10 h-1 bg-[var(--color-border)] rounded-full mx-auto" />
 
             <div className="text-center space-y-1">
               <h3 className="text-lg font-black text-gray-800">谁来陪你读？</h3>
@@ -191,11 +191,11 @@ export default function BookLibraryPage() {
             </div>
 
             <div className="grid grid-cols-3 gap-2.5">
-              {ULTRAMAN_CHARACTERS.map(c => (
+              {CHARACTERS.map(c => (
                 <button
                   key={c.id}
                   onClick={() => handleHeroSelect(c.id)}
-                  className="flex flex-col items-center gap-1.5 p-2.5 rounded-2xl border-2 border-[#E8DED5] bg-white hover:border-[#E8453C]/40 active:scale-[0.95] transition-all"
+                  className="flex flex-col items-center gap-1.5 p-2.5 rounded-2xl border-2 border-[var(--color-border)] bg-white hover:border-[var(--color-primary)]/40 active:scale-[0.95] transition-all"
                 >
                   <UltramanAvatar character={c} size="sm" />
                   <span className="text-xs font-bold text-gray-600">{c.shortName}</span>

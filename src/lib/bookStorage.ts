@@ -157,6 +157,7 @@ export async function getAllBookImages(bookId: string): Promise<BookImage[]> {
 
 // Parse idb:// paths → { bookId, pageIndex }
 export function parseIdbPath(path: string): { bookId: string; pageIndex: number } | null {
+  if (!path) return null
   const match = path.match(/^idb:\/\/(.+)\/page-(\d+)$/)
   if (!match) return null
   return { bookId: match[1], pageIndex: parseInt(match[2], 10) }

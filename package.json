@@ -5,7 +5,19 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "dev:elsa": "VITE_THEME=elsa vite",
+    "build": "npx tsc -b && vite build",
+    "build:elsa": "VITE_THEME=elsa npx tsc -b && VITE_THEME=elsa vite build",
+    "dev:license": "VITE_LICENSE_MODE=true vite",
+    "dev:elsa:license": "VITE_THEME=elsa VITE_LICENSE_MODE=true vite",
+    "build:license": "VITE_LICENSE_MODE=true npx tsc -b && VITE_LICENSE_MODE=true vite build",
+    "build:elsa:license": "VITE_THEME=elsa VITE_LICENSE_MODE=true npx tsc -b && VITE_THEME=elsa VITE_LICENSE_MODE=true vite build",
+    "dev:pawpatrol": "VITE_THEME=pawpatrol vite",
+    "build:pawpatrol": "VITE_THEME=pawpatrol npx tsc -b && VITE_THEME=pawpatrol vite build",
+    "dev:pawpatrol:license": "VITE_THEME=pawpatrol VITE_LICENSE_MODE=true vite",
+    "build:pawpatrol:license": "VITE_THEME=pawpatrol VITE_LICENSE_MODE=true npx tsc -b && VITE_THEME=pawpatrol VITE_LICENSE_MODE=true vite build",
+    "license:gen": "node scripts/generate-license.mjs",
+    "license:list": "node scripts/list-licenses.mjs",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -14,6 +26,7 @@
     "@capacitor/android": "^8.2.0",
     "@capacitor/cli": "^8.2.0",
     "@capacitor/core": "^8.2.0",
+    "@capacitor/filesystem": "^8.1.2",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-router-dom": "^7.13.2"

@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useApp } from '../context/AppContext'
-import { ULTRAMAN_CHARACTERS } from '../data/ultramanCharacters'
+import { CHARACTERS, theme } from '../config/theme'
 import { loadCatalog, recommendBook, computeKnownRatio } from '../lib/books'
 import UltramanAvatar from '../components/shared/UltramanAvatar'
+import BookImage from '../components/shared/BookImage'
 import type { PictureBookMeta } from '../types/picturebook'
 
 type Step = 'select-hero' | 'loading' | 'book-ready' | 'no-books'
@@ -85,7 +86,7 @@ export default function BookSelectPage() {
         <p className="text-gray-400 text-sm">还没有处理好的绘本数据，请稍后再试</p>
         <button
           onClick={() => setStep('select-hero')}
-          className="mt-4 px-6 py-3 rounded-2xl border-2 border-[#E8DED5] text-gray-600 font-bold active:scale-[0.97] transition-all"
+          className="mt-4 px-6 py-3 rounded-2xl border-2 border-[var(--color-border)] text-gray-600 font-bold active:scale-[0.97] transition-all"
         >
           ← 返回选择
         </button>
@@ -95,7 +96,7 @@ export default function BookSelectPage() {
 
   // --- Book ready ---
   if (step === 'book-ready' && recommendedBook && selectedHeroId) {
-    const hero = ULTRAMAN_CHARACTERS.find(c => c.id === selectedHeroId)!
+    const hero = CHARACTERS.find(c => c.id === selectedHeroId)!
     return (
       <div className="space-y-6 py-4">
         <div className="text-center space-y-2">
@@ -103,8 +104,8 @@ export default function BookSelectPage() {
           <h2 className="text-xl font-black text-gray-800 mt-2">{hero.shortName}推荐了一本书</h2>
         </div>
 
-        <div className="bg-white rounded-2xl border-2 border-[#E8DED5] overflow-hidden shadow-sm">
-          <img
+        <div className="bg-white rounded-2xl border-2 border-[var(--color-border)] overflow-hidden shadow-sm">
+          <BookImage
             src={recommendedBook.coverImage}
             alt={recommendedBook.title}
             className="w-full max-h-48 object-contain bg-gray-50"
@@ -125,7 +126,7 @@ export default function BookSelectPage() {
 
         <button
           onClick={startReading}
-          className="w-full py-4 rounded-2xl font-black text-lg bg-[#E8453C] text-white active:scale-[0.97] transition-all shadow-[0_3px_0_#c13a33]"
+          className="w-full py-4 rounded-2xl font-black text-lg bg-[var(--color-primary)] text-white active:scale-[0.97] transition-all shadow-[0_3px_0_var(--color-primary-dark)]"
         >
           开始阅读 📖
         </button>
@@ -133,13 +134,13 @@ export default function BookSelectPage() {
         <div className="flex gap-3">
           <button
             onClick={() => { setSelectedHeroId(null); setSkipIndex(0); setStep('select-hero') }}
-            className="flex-1 py-3 rounded-2xl font-bold text-base border-2 border-[#E8DED5] text-gray-600 hover:bg-[#F0E6DD] active:scale-[0.97] transition-all"
+            className="flex-1 py-3 rounded-2xl font-bold text-base border-2 border-[var(--color-border)] text-gray-600 hover:bg-[var(--color-bg-hover)] active:scale-[0.97] transition-all"
           >
-            ← 换奥特曼
+            {theme.labels.changeHero}
           </button>
           <button
             onClick={handleRefresh}
-            className="flex-1 py-3 rounded-2xl font-bold text-base border-2 border-[#E8DED5] text-gray-600 hover:bg-[#F0E6DD] active:scale-[0.97] transition-all"
+            className="flex-1 py-3 rounded-2xl font-bold text-base border-2 border-[var(--color-border)] text-gray-600 hover:bg-[var(--color-bg-hover)] active:scale-[0.97] transition-all"
           >
             🔄 换一本
           </button>
@@ -153,11 +154,11 @@ export default function BookSelectPage() {
     <div className="space-y-6 py-4">
       <div className="text-center space-y-2">
         <h2 className="text-2xl font-black text-gray-800">谁来陪你读绘本？</h2>
-        <p className="text-sm text-gray-400">选一个奥特曼陪你读故事吧</p>
+        <p className="text-sm text-gray-400">{theme.labels.selectHeroForBook}</p>
       </div>
 
       <div className="grid grid-cols-3 gap-3">
-        {ULTRAMAN_CHARACTERS.map(c => {
+        {CHARACTERS.map(c => {
           const selected = selectedHeroId === c.id
           return (
             <button
@@ -165,16 +166,16 @@ export default function BookSelectPage() {
               onClick={() => handleHeroSelect(c.id)}
               className={`flex flex-col items-center gap-2 p-3 rounded-2xl border-2 transition-all active:scale-[0.95] ${
                 selected
-                  ? 'border-[#E8453C] bg-[#E8453C]/5 shadow-md'
-                  : 'border-[#E8DED5] bg-white hover:border-[#E8453C]/30'
+                  ? 'border-[var(--color-primary)] bg-[var(--color-primary)]/5 shadow-md'
+                  : 'border-[var(--color-border)] bg-white hover:border-[var(--color-primary)]/30'
               }`}
             >
               <UltramanAvatar character={c} size="md" />
-              <span className={`text-sm font-bold ${selected ? 'text-[#E8453C]' : 'text-gray-600'}`}>
+              <span className={`text-sm font-bold ${selected ? 'text-[var(--color-primary)]' : 'text-gray-600'}`}>
                 {c.shortName}
               </span>
               {selected && (
-                <span className="text-xs text-[#E8453C]">✓ 已选</span>
+                <span className="text-xs text-[var(--color-primary)]">✓ 已选</span>
               )}
             </button>
           )
@@ -184,7 +185,7 @@ export default function BookSelectPage() {
       <button
         onClick={handleFindBook}
         disabled={!selectedHeroId}
-        className="w-full py-4 rounded-2xl font-black text-lg bg-[#E8453C] text-white active:scale-[0.97] transition-all shadow-[0_3px_0_#c13a33] disabled:opacity-40 disabled:cursor-not-allowed"
+        className="w-full py-4 rounded-2xl font-black text-lg bg-[var(--color-primary)] text-white active:scale-[0.97] transition-all shadow-[0_3px_0_var(--color-primary-dark)] disabled:opacity-40 disabled:cursor-not-allowed"
       >
         找绘本 📖
       </button>
